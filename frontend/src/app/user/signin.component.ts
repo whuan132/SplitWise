@@ -9,39 +9,48 @@ import { UserService } from './user.service';
   selector: 'app-signin',
   template: `
     <h2>Sign In</h2>
-    <form [formGroup]="signinForm" (ngSubmit)="signIn()">
-      <div>
-        <label for="email">Email:</label>
-        <input type="email" id="email" formControlName="email" required />
-        <div *ngIf="email?.touched && email?.invalid">
-          <div *ngIf="email?.errors?.['required']">Email is required.</div>
-          <div *ngIf="email?.errors?.['email']">Invalid email format.</div>
+    <form class="container" [formGroup]="signinForm" (ngSubmit)="signIn()">
+      <input
+        type="email"
+        placeholder="Email"
+        formControlName="email"
+        required
+      />
+      <div *ngIf="email?.touched && email?.invalid">
+        <div [style.color]="'red'" *ngIf="email?.errors?.['required']">
+          Email is required.
+        </div>
+        <div [style.color]="'red'" *ngIf="email?.errors?.['email']">
+          Invalid email format.
         </div>
       </div>
-      <div>
-        <label for="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          formControlName="password"
-          required
-        />
-        <div *ngIf="password?.touched && password?.invalid">
-          <div *ngIf="password?.errors?.['required']">
-            Password is required.
-          </div>
+
+      <input
+        type="password"
+        placeholder="Password"
+        formControlName="password"
+        required
+      />
+      <div *ngIf="password?.touched && password?.invalid">
+        <div [style.color]="'red'" *ngIf="password?.errors?.['required']">
+          Password is required.
         </div>
       </div>
-      <button class="button" type="submit" [disabled]="signinForm.invalid">
-        Sign In
-      </button>
+
+      <button type="submit" [disabled]="signinForm.invalid">Sign In</button>
     </form>
   `,
   styles: [
     `
-      .button {
-        margin-top: 20px;
-        padding: 5px;
+      .container {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 10px;
+      }
+      div,
+      input,
+      button {
+        margin-bottom: 10px;
       }
     `,
   ],

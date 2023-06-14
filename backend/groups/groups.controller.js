@@ -62,6 +62,20 @@ export const delete_group = async (req, res, next) => {
 export const add_transaction = async (req, res, next) => {
   try {
     const token = req.body["tokenData"];
+    const { originalname, filename } = req.file;
+    const { title, description, category, amount, date } = req.body;
+    const trans = {
+      title,
+      description,
+      category,
+      amount: parseInt(amount),
+      date: new Date(date).getTime(),
+      paid_by: { user_id: token._id, fullname: token.fullname },
+      receipt: {
+        filename,
+        originalname,
+      },
+    };
     const results = await groupsModel.updateOne(
       {
         "members.user_id": token._id,
@@ -69,18 +83,7 @@ export const add_transaction = async (req, res, next) => {
       },
       {
         $push: {
-          transactions: {
-            title: req.body["title"],
-            description: req.body["description"],
-            paid_by: { user_id: token._id, fullname: token.fullname },
-            category: req.body["category"],
-            amount: req.body["amount"],
-            date: req.body["date"],
-            receipt: {
-              filename: req.body["receipt"]["filename"],
-              originalname: req.body["receipt"]["originalname"],
-            },
-          },
+          transactions: trans,
         },
       }
     );

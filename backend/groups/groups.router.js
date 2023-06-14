@@ -1,4 +1,5 @@
 import { Router } from "express";
+import multer from "multer";
 import {
   get_groups,
   add_group,
@@ -9,6 +10,7 @@ import {
   add_member,
   delete_member,
 } from "../groups/groups.controller.js";
+import { checkToken } from "../users/users.middleware.js";
 const router = Router();
 
 router.get("/", get_groups);
@@ -17,7 +19,12 @@ router.post("/", add_group);
 router.get("/:group_id", get_group);
 router.delete("/:group_id", delete_group);
 
-router.put("/:group_id/transactions", add_transaction);
+router.put(
+  "/:group_id/transactions",
+  multer({ dest: "uploads/" }).single("receipt"),
+  checkToken,
+  add_transaction
+);
 router.delete("/:group_id/transactions/:transaction_id", delete_transaction);
 
 router.put("/:group_id/members", add_member);

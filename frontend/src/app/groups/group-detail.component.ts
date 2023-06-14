@@ -84,7 +84,9 @@ export class GroupDetailComponent {
     this.groupsService.getGroupById(this.groupId).subscribe(
       (res) => {
         console.log(res.data);
+        const myEmail = this.stateService.user().email;
         this.group = res.data as IGroup;
+        this.group.members.sort((m) => (m.email !== myEmail ? 0 : -1));
       },
       (error) => {
         console.log(error);

@@ -18,8 +18,13 @@ import { StateService } from '../user/state.service';
           >
             {{ g.title }} - {{ g.members[0].fullname }}
           </a>
+
           <button *ngIf="isPending(g)" (click)="acceptGroup(g)">Accept</button>
-          <button (click)="deleteGroup(g._id)">x</button>
+          <button *ngIf="isPending(g)" (click)="rejectGroup(g._id)">
+            Reject
+          </button>
+
+          <button *ngIf="!isPending(g)" (click)="deleteGroup(g._id)">x</button>
         </div>
 
         <button (click)="addGroup()">Add New Spending Group</button>
@@ -37,6 +42,7 @@ import { StateService } from '../user/state.service';
       input,
       button {
         margin-bottom: 10px;
+        margin-right: 10px;
       }
 
       a {
@@ -57,7 +63,7 @@ export class ListComponent {
       (res) => {
         if (res && res.success) {
           this.groups = res.data as IGroup[];
-          // this.groups.sortOn();
+          this.groups.sort((m1, m2) => (this.isPending(m1) ? 1 : -1));
         }
       },
       (error) => {
@@ -85,6 +91,18 @@ export class ListComponent {
           }
           return false;
         });
+        this.groups.sort((m1, m2) => (this.isPending(m1) ? 1 : -1));
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+
+  rejectGroup(group_id: string) {
+    this.groupService.rejectGroup(group_id).subscribe(
+      (res) => {
+        this.groups = this.groups.filter((g) => g._id !== group_id);
       },
       (error) => {
         console.log(error);

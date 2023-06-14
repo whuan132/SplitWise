@@ -50,6 +50,12 @@ export class GroupsService {
     });
   }
 
+  rejectGroup(group_id: string) {
+    return this.http.delete<TypedResponse>(
+      this.api + '/groups/' + group_id + '/members'
+    );
+  }
+
   deleteGroup(group_id: string) {
     return this.http.delete<TypedResponse>(this.api + '/groups/' + group_id);
   }

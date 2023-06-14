@@ -5,6 +5,7 @@ import {
   add_group,
   get_group,
   accept_group,
+  reject_group,
   delete_group,
   add_transaction,
   delete_transaction,
@@ -20,6 +21,7 @@ router.post("/", add_group);
 router.get("/:group_id", get_group);
 router.put("/:group_id", accept_group);
 router.delete("/:group_id", delete_group);
+router.delete("/:group_id/members", reject_group);
 
 router.put(
   "/:group_id/transactions",

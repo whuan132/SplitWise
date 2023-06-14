@@ -73,6 +73,30 @@ export const accept_group = async (req, res, next) => {
   }
 };
 
+// reject the invitation
+export const reject_group = async (req, res, next) => {
+  try {
+    const token = req.body["tokenData"];
+    const results = await groupsModel.updateOne(
+      {
+        _id: req.params.group_id,
+        "members.email": token.email,
+        "members.pending": true,
+      },
+      {
+        $pull: {
+          members: {
+            email: token.email,
+          },
+        },
+      }
+    );
+    res.json({ success: true, data: results });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const delete_group = async (req, res, next) => {
   try {
     const token = req.body["tokenData"];

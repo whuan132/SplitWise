@@ -14,6 +14,7 @@ import {
   HttpClientModule,
   HTTP_INTERCEPTORS,
 } from '@angular/common/http';
+import {NgIf} from "@angular/common";
 
 @NgModule({
   declarations: [
@@ -22,12 +23,16 @@ import {
     SignupComponent,
     HomeComponent,
     AboutComponent,
+
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
+    ReactiveFormsModule,
+    NgIf,
+    ReactiveFormsModule,
   ],
   providers: [
     provideHttpClient(),

@@ -41,7 +41,7 @@ export class GroupsService {
   }
 
   addGroup(data: { title: string }) {
-    return this.http.post<TypedResponse>(this.api + '/groups', data);
+    return this.http.post<TypedResponse<IGroup>>(this.api + '/groups', data);
   }
 
   acceptGroup(group_id: string) {

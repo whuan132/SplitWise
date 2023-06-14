@@ -9,6 +9,10 @@ import { ListComponent } from './list.component';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
+import { HeaderComponent } from './header.component';
+import { ModalComponent } from './modal.component';
+import { TransactionComponent } from './transaction.component';
+import { MembersComponent } from './members.component';
 
 const routes: Routes = [
   {
@@ -47,6 +51,10 @@ const routes: Routes = [
     ColorDirective,
     AddTransactionComponent,
     InviteMemberComponent,
+    HeaderComponent,
+    ModalComponent,
+    TransactionComponent,
+    MembersComponent,
   ],
   imports: [CommonModule, ReactiveFormsModule, RouterModule.forChild(routes)],
   exports: [RouterModule],

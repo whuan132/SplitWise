@@ -1,38 +1,35 @@
 import { Component, effect, inject } from '@angular/core';
 import { IUser, StateService } from './user/state.service';
 import { Router } from '@angular/router';
+import {initDials, initTooltips} from "flowbite";
 
 @Component({
   selector: 'app-root',
   template: `
-    <header class="nav_header">
-      <!-- after sign in -->
-      <nav *ngIf="signed; else signin">
-        <a class="nav_link" [routerLink]="['', 'home']">Home</a>
 
-        <a class="nav_link" [routerLink]="['', 'groups']">Goups</a>
+<!--    <header class="nav_header">-->
+<!--      &lt;!&ndash; after sign in &ndash;&gt;-->
+<!--      <nav *ngIf="signed; else signin">-->
+<!--        <a class="nav_link" [routerLink]="['', 'home']">Home</a>-->
 
-        <a class="nav_link" [routerLink]="['']" (click)="signout()">Sign Out</a>
-        <a class="nav_link" [routerLink]="['', 'about']">About</a>
-      </nav>
-      <!-- before sign in -->
-      <ng-template #signin>
-        <a class="nav_link" [routerLink]="['', 'home']">Home</a>
-        <a class="nav_link" [routerLink]="['', 'signin']">Sign In</a>
-        <a class="nav_link" [routerLink]="['', 'signup']">Sign Up</a>
-        <a class="nav_link" [routerLink]="['', 'about']">About</a>
-      </ng-template>
-    </header>
+<!--        <a class="nav_link" [routerLink]="['', 'groups']">Goups</a>-->
+
+<!--        <a class="nav_link" [routerLink]="['']" (click)="signout()">Sign Out</a>-->
+<!--        <a class="nav_link" [routerLink]="['', 'about']">About</a>-->
+<!--      </nav>-->
+<!--      &lt;!&ndash; before sign in &ndash;&gt;-->
+<!--      <ng-template #signin>-->
+<!--        <a class="nav_link" [routerLink]="['', 'home']">Home</a>-->
+<!--        <a class="nav_link" [routerLink]="['', 'signin']">Sign In</a>-->
+<!--        <a class="nav_link" [routerLink]="['', 'signup']">Sign Up</a>-->
+<!--        <a class="nav_link" [routerLink]="['', 'about']">About</a>-->
+<!--      </ng-template>-->
+<!--    </header>-->
     <router-outlet></router-outlet>
   `,
   styles: [
     `
-      .nav_header {
-        margin-bottom: 15px;
-      }
-      .nav_link {
-        margin-right: 10px;
-      }
+
     `,
   ],
 })
@@ -47,6 +44,12 @@ export class AppComponent {
       const user = this.stateService.user();
       this.saveStateToLocalStorage(user);
     });
+  }
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+    initTooltips();
+    initDials();
   }
 
   get signed() {

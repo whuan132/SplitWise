@@ -1,6 +1,9 @@
 import { AddGroupComponent } from './add-group.component';
+import { AddTransactionComponent } from './add-transaction.component';
 import { authGuard } from '../user/auth.guard';
+import { ColorDirective } from './color.directive';
 import { CommonModule } from '@angular/common';
+import { GroupDetailComponent } from './group-detail.component';
 import { ListComponent } from './list.component';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -18,10 +21,26 @@ const routes: Routes = [
     component: AddGroupComponent,
     canActivate: [authGuard],
   },
+  {
+    path: 'detail/:group_id',
+    component: GroupDetailComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'add-transaction/:group_id',
+    component: AddTransactionComponent,
+    canActivate: [authGuard],
+  },
 ];
 
 @NgModule({
-  declarations: [ListComponent, AddGroupComponent],
+  declarations: [
+    ListComponent,
+    AddGroupComponent,
+    GroupDetailComponent,
+    ColorDirective,
+    AddTransactionComponent,
+  ],
   imports: [CommonModule, ReactiveFormsModule, RouterModule.forChild(routes)],
   exports: [RouterModule],
 })

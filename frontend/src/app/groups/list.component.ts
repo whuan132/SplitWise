@@ -7,56 +7,41 @@ import { Router } from '@angular/router';
   template: `
     <h2>My Spending Groups</h2>
 
-    <div class="group-container" *ngIf="groups">
-      <div class="group" *ngFor="let group of groups">
-        <p class="group-child-p">
-          {{ group.title }} - {{ group.members[0].fullname }}
-        </p>
-        <button class="group-child-button">Detail</button>
-        <button class="group-child-button" (click)="deleteGroup(group._id)">
-          Delete
-        </button>
-      </div>
-    </div>
+    <h3 *ngIf="!groups; else list">Loading...</h3>
+    <ng-template #list>
+      <div class="container">
+        <div *ngFor="let g of groups">
+          <a [routerLink]="['', 'groups', 'detail', g._id]">
+            {{ g.title }} - {{ g.members[0].fullname }}
+          </a>
+          <button (click)="deleteGroup(g._id)">X</button>
+        </div>
 
-    <button class="add-button" (click)="addGroup()">
-      Add New Spending Group
-    </button>
+        <button (click)="addGroup()">Add New Spending Group</button>
+      </div>
+    </ng-template>
   `,
   styles: [
     `
-      .group-container {
+      .container {
         display: flex;
         flex-direction: column;
         margin-bottom: 10px;
       }
-
-      .group {
-        display: flex;
-        align-items: center;
-        flex-direction: row;
+      div,
+      input,
+      button {
         margin-bottom: 10px;
       }
 
-      .group-child-p {
-        margin-right: 15px;
-      }
-
-      .group-child-button {
-        margin-right: 15px;
-        width: 80px;
-        height: 30px;
-      }
-
-      .add-button {
-        margin-top: 10px;
-        padding: 15px;
+      a {
+        margin-right: 10px;
       }
     `,
   ],
 })
 export class ListComponent {
-  groups: IGroup[] = [];
+  groups!: IGroup[];
 
   private groupService = inject(GroupsService);
   private router = inject(Router);

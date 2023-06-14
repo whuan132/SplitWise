@@ -46,4 +46,15 @@ export class GroupsService {
   deleteGroup(group_id: string) {
     return this.http.delete<TypedResponse>(this.api + '/groups/' + group_id);
   }
+
+  getGroupById(group_id: string) {
+    return this.http.get<TypedResponse>(this.api + '/groups/' + group_id);
+  }
+
+  addTransaction(group_id: string, trans: any) {
+    return this.http.put<TypedResponse>(
+      this.api + '/groups/' + group_id + '/transactions',
+      trans
+    );
+  }
 }

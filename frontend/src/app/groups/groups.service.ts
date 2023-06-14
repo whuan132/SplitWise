@@ -18,6 +18,7 @@ export interface IMember {
 }
 
 export interface ITransaction {
+  _id: string;
   title: string;
   description: string;
   paid_by: { user_id: string; fullname: string };
@@ -55,6 +56,12 @@ export class GroupsService {
     return this.http.put<TypedResponse>(
       this.api + '/groups/' + group_id + '/transactions',
       trans
+    );
+  }
+
+  deleteTransaction(group_id: string, trans_id: string) {
+    return this.http.delete<TypedResponse>(
+      this.api + '/groups/' + group_id + '/transactions/' + trans_id
     );
   }
 }

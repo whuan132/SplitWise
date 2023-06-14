@@ -28,6 +28,7 @@ import { StateService } from '../user/state.service';
           {{ t.date | date }} - {{ t.title }} - {{ t.description }} -
           {{ t.category }} - User {{ t.paid_by.fullname }} paid
           {{ t.amount | currency : 'USD' }}
+          <button (click)="deleteTransaction(t._id)">X</button>
         </div>
 
         <!-- Go Back Button -->
@@ -42,8 +43,9 @@ import { StateService } from '../user/state.service';
         flex-direction: column;
         margin-bottom: 10px;
       }
-      button,
-      div {
+      div,
+      input,
+      button {
         margin-bottom: 10px;
       }
     `,
@@ -110,6 +112,19 @@ export class GroupDetailComponent {
 
   addTransaction() {
     this.router.navigate(['', 'groups', 'add-transaction', this.groupId]);
+  }
+
+  deleteTransaction(trans_id: string) {
+    this.groupsService.deleteTransaction(this.groupId, trans_id).subscribe(
+      (res) => {
+        this.group.transactions = this.group.transactions.filter(
+          (t) => t._id !== trans_id
+        );
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
   goBack() {

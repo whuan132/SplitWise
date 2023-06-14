@@ -77,8 +77,9 @@ export const delete_group = async (req, res, next) => {
   try {
     const token = req.body["tokenData"];
     const results = await groupsModel.deleteOne({
-      "members.user_id": token._id,
       _id: req.params.group_id,
+      "members.user_id": token._id,
+      "members.pending": false,
     });
     res.json({ success: true, data: results });
   } catch (error) {
@@ -146,6 +147,13 @@ export const delete_transaction = async (req, res, next) => {
 export const add_member = async (req, res, next) => {
   try {
     const token = req.body["tokenData"];
+
+    const exist = await groupsModel.findOne({
+      _id: req.params.group_id,
+      "members.email": req.body["email"],
+    });
+    if (exist) throw new Error("Memeber is exist");
+
     const results = await groupsModel.updateOne(
       {
         _id: req.params.group_id,

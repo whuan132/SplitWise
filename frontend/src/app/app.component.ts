@@ -9,6 +9,9 @@ import { Router } from '@angular/router';
       <!-- after sign in -->
       <nav *ngIf="signed; else signin">
         <a class="nav_link" [routerLink]="['', 'home']">Home</a>
+
+        <a class="nav_link" [routerLink]="['', 'groups']">Goups</a>
+
         <a class="nav_link" [routerLink]="['']" (click)="signout()">Sign Out</a>
         <a class="nav_link" [routerLink]="['', 'about']">About</a>
       </nav>
@@ -48,7 +51,7 @@ export class AppComponent {
 
   get signed() {
     const user = this.stateService.user();
-    return user._id && user.email;
+    return user._id && user.email && user.token;
   }
 
   signout() {
@@ -56,6 +59,7 @@ export class AppComponent {
       fullname: '',
       email: '',
       _id: '',
+      token: '',
     });
     this.router.navigate(['', 'signin']);
   }
@@ -68,7 +72,7 @@ export class AppComponent {
   }
 
   private saveStateToLocalStorage(user: IUser): void {
-    if (user.email === '' || user._id === '') {
+    if (!this.signed) {
       localStorage.clear();
       return;
     }

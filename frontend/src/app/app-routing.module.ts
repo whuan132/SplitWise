@@ -1,4 +1,5 @@
 import { AboutComponent } from './about.component';
+import { authGuard } from './user/auth.guard';
 import { HomeComponent } from './home.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -12,6 +13,13 @@ const routes: Routes = [
 
   { path: 'signin', component: SigninComponent },
   { path: 'signup', component: SignupComponent },
+
+  {
+    path: 'groups',
+    loadChildren: () =>
+      import('./groups/groups.module').then((m) => m.GroupsModule),
+    canActivate: [authGuard],
+  },
 ];
 
 @NgModule({

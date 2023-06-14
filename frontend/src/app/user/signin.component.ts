@@ -32,10 +32,19 @@ import { UserService } from './user.service';
           </div>
         </div>
       </div>
-      <button type="submit" [disabled]="signinForm.invalid">Sign In</button>
+      <button class="button" type="submit" [disabled]="signinForm.invalid">
+        Sign In
+      </button>
     </form>
   `,
-  styles: [],
+  styles: [
+    `
+      .button {
+        margin-top: 20px;
+        padding: 5px;
+      }
+    `,
+  ],
 })
 export class SigninComponent {
   signinForm = inject(FormBuilder).group({
@@ -66,9 +75,10 @@ export class SigninComponent {
         (res) => {
           if (res && res.success) {
             try {
-              const user = jwtDecode(res.data as string) as IUser;
+              const token = res.data as string;
+              const user = jwtDecode(token) as IUser;
               console.log(user);
-              this.stateService.user.set(user);
+              this.stateService.user.set({ ...user, token });
               this.router.navigate(['', 'home']);
             } catch (error) {
               console.error('Error decoding JWT:', error);

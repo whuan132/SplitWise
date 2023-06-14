@@ -39,10 +39,19 @@ import { UserService } from './user.service';
           </div>
         </div>
       </div>
-      <button type="submit" [disabled]="signupForm.invalid">Sign Up</button>
+      <button class="button" type="submit" [disabled]="signupForm.invalid">
+        Sign Up
+      </button>
     </form>
   `,
-  styles: [],
+  styles: [
+    `
+      .button {
+        margin-top: 20px;
+        padding: 5px;
+      }
+    `,
+  ],
 })
 export class SignupComponent {
   signupForm = inject(FormBuilder).group({

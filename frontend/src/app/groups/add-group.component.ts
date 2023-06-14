@@ -8,20 +8,27 @@ import { Router } from '@angular/router';
   template: `
     <h2>Add New Spending Group</h2>
 
-    <form [formGroup]="groupForm" (ngSubmit)="onSubmit()">
-      <div>
-        <label for="title">Title:</label>
-        <input type="text" id="title" formControlName="title" />
-        <div *ngIf="title?.invalid && title?.touched">Title is required.</div>
+    <form class="container" [formGroup]="groupForm" (ngSubmit)="onSubmit()">
+      <input type="text" placeholder="Title" formControlName="title" />
+      <div [style.color]="'red'" *ngIf="title?.invalid && title?.touched">
+        Title is required.
       </div>
       <button class="button" type="submit">Add Group</button>
+      <!-- Go Back Button -->
+      <button (click)="goBack()">Back</button>
     </form>
   `,
   styles: [
     `
-      .button {
-        margin-top: 20px;
-        padding: 5px;
+      .container {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 10px;
+      }
+      div,
+      input,
+      button {
+        margin-bottom: 10px;
       }
     `,
   ],
@@ -48,5 +55,9 @@ export class AddGroupComponent {
         this.router.navigate(['', 'groups']);
       });
     }
+  }
+
+  goBack() {
+    this.router.navigate(['', 'groups']);
   }
 }

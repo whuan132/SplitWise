@@ -4,7 +4,7 @@ export const get_groups = async (req, res, next) => {
   try {
     const token = req.body["tokenData"];
     const results = await groupsModel.find({
-      "members.user_id": token._id,
+      "members.email": token.email,
     });
     res.json({ success: true, data: results });
   } catch (error) {
@@ -40,6 +40,33 @@ export const get_group = async (req, res, next) => {
       "members.user_id": token._id,
       _id: req.params.group_id,
     });
+    res.json({ success: true, data: results });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// accept the invitation
+export const accept_group = async (req, res, next) => {
+  try {
+    const token = req.body["tokenData"];
+    const results = await groupsModel.updateOne(
+      {
+        _id: req.params.group_id,
+        "members.email": token.email,
+        "members.pending": true,
+      },
+      {
+        $set: {
+          "members.$": {
+            user_id: token._id,
+            fullname: token.fullname,
+            email: token.email,
+            pending: false,
+          },
+        },
+      }
+    );
     res.json({ success: true, data: results });
   } catch (error) {
     next(error);
@@ -130,32 +157,6 @@ export const add_member = async (req, res, next) => {
           members: {
             email: req.body["email"],
             pending: true,
-          },
-        },
-      }
-    );
-    res.json({ success: true, data: results });
-  } catch (error) {
-    next(error);
-  }
-};
-
-// accept the invitation
-export const accept_member = async (req, res, next) => {
-  try {
-    const token = req.body["tokenData"];
-    const results = await groupsModel.updateOne(
-      {
-        _id: req.params.group_id,
-        "members.user_id": token._id,
-        "members.pending": true,
-      },
-      {
-        $set: {
-          "members.$": {
-            user_id: token._id,
-            fullname: token.fullname,
-            pending: false,
           },
         },
       }

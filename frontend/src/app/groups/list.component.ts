@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { GroupsService, IGroup } from './groups.service';
 import { Router } from '@angular/router';
+import { StateService } from '../user/state.service';
 
 @Component({
   selector: 'app-list',
@@ -11,9 +12,13 @@ import { Router } from '@angular/router';
     <ng-template #list>
       <div class="container">
         <div *ngFor="let g of groups">
-          <a [routerLink]="['', 'groups', 'detail', g._id]">
+          <a
+            [routerLink]="['', 'groups', 'detail', g._id]"
+            [routerLinkActive]="isPending(g) ? 'false' : 'true'"
+          >
             {{ g.title }} - {{ g.members[0].fullname }}
           </a>
+          <button *ngIf="isPending(g)" (click)="acceptGroup(g)">Accept</button>
           <button (click)="deleteGroup(g._id)">x</button>
         </div>
 
@@ -43,6 +48,7 @@ import { Router } from '@angular/router';
 export class ListComponent {
   groups!: IGroup[];
 
+  private stateService = inject(StateService);
   private groupService = inject(GroupsService);
   private router = inject(Router);
 
@@ -51,7 +57,34 @@ export class ListComponent {
       (res) => {
         if (res && res.success) {
           this.groups = res.data as IGroup[];
+          // this.groups.sortOn();
         }
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+
+  isPending(group: IGroup) {
+    const myEmail = this.stateService.user().email;
+    return group.members.find((m) => m.email === myEmail && m.pending);
+  }
+
+  acceptGroup(group: IGroup) {
+    this.groupService.acceptGroup(group._id).subscribe(
+      (res) => {
+        console.log(res);
+        const user = this.stateService.user();
+        group.members.find((m) => {
+          if (m.email === user.email) {
+            m.user_id = user._id;
+            m.fullname = user.fullname;
+            m.pending = false;
+            return true;
+          }
+          return false;
+        });
       },
       (error) => {
         console.log(error);

@@ -44,6 +44,12 @@ export class GroupsService {
     return this.http.post<TypedResponse>(this.api + '/groups', data);
   }
 
+  acceptGroup(group_id: string) {
+    return this.http.put<TypedResponse>(this.api + '/groups/' + group_id, {
+      pending: true,
+    });
+  }
+
   deleteGroup(group_id: string) {
     return this.http.delete<TypedResponse>(this.api + '/groups/' + group_id);
   }

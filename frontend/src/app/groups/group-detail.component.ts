@@ -12,24 +12,32 @@ import { StateService } from '../user/state.service';
         <h2>{{ group.title }}</h2>
 
         <!-- Members -->
-        <h3>Report: <button (click)="inviteMember()">Invite Member</button></h3>
+        <h3>Members: <button (click)="inviteMember()">+</button></h3>
         <div *ngFor="let m of group?.members" [app-color]="getOwesBy(m)">
-          User {{ m.fullname }} spent {{ getSpendBy(m) | currency : 'USD' }} in
-          total => owes
-          {{ getOwesBy(m) | currency : 'USD' }}
-          <button (click)="deleteMember(m.email)" *ngIf="!isOwner(m)">x</button>
+          User <b>{{ m.fullname || m.email }}</b> spent
+          <b>{{ getSpendBy(m) | currency : 'USD' }}</b> in total => owes
+          <b>{{ getOwesBy(m) | currency : 'USD' }}</b>
+          <button
+            class="del-button"
+            (click)="deleteMember(m.email)"
+            *ngIf="!isOwner(m)"
+          >
+            x
+          </button>
         </div>
 
         <!-- Transactions -->
         <h3>
           Transactions:
-          <button (click)="addTransaction()">Add Transaction</button>
+          <button (click)="addTransaction()">+</button>
         </h3>
         <div *ngFor="let t of group?.transactions">
           {{ t.date | date }} - {{ t.title }} - {{ t.description }} -
           {{ t.category }} - User {{ t.paid_by.fullname }} paid
           {{ t.amount | currency : 'USD' }}
-          <button (click)="deleteTransaction(t._id)">x</button>
+          <button class="del-button" (click)="deleteTransaction(t._id)">
+            x
+          </button>
         </div>
 
         <!-- Go Back Button -->
@@ -48,6 +56,10 @@ import { StateService } from '../user/state.service';
       input,
       button {
         margin-bottom: 10px;
+      }
+
+      .del-button {
+        margin-left: 10px;
       }
     `,
   ],

@@ -33,8 +33,8 @@ import { StateService } from '../user/state.service';
         </h3>
         <div *ngFor="let t of group?.transactions">
           {{ t.date | date }} - {{ t.title }} - {{ t.description }} -
-          {{ t.category }} - User {{ t.paid_by.fullname }} paid
-          {{ t.amount | currency : 'USD' }}
+          {{ t.category }} - User <b>{{ t.paid_by.fullname }}</b> paid
+          <b>{{ t.amount | currency : 'USD' }}</b>
           <button class="del-button" (click)="deleteTransaction(t._id)">
             x
           </button>

@@ -4,6 +4,7 @@ import { authGuard } from '../user/auth.guard';
 import { ColorDirective } from './color.directive';
 import { CommonModule } from '@angular/common';
 import { GroupDetailComponent } from './group-detail.component';
+import { InviteMemberComponent } from './invite-member.component';
 import { ListComponent } from './list.component';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -31,6 +32,11 @@ const routes: Routes = [
     component: AddTransactionComponent,
     canActivate: [authGuard],
   },
+  {
+    path: 'invite-member/:group_id',
+    component: InviteMemberComponent,
+    canActivate: [authGuard],
+  },
 ];
 
 @NgModule({
@@ -40,6 +46,7 @@ const routes: Routes = [
     GroupDetailComponent,
     ColorDirective,
     AddTransactionComponent,
+    InviteMemberComponent,
   ],
   imports: [CommonModule, ReactiveFormsModule, RouterModule.forChild(routes)],
   exports: [RouterModule],

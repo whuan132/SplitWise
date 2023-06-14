@@ -64,4 +64,17 @@ export class GroupsService {
       this.api + '/groups/' + group_id + '/transactions/' + trans_id
     );
   }
+
+  inviteMember(group_id: string, email: string) {
+    return this.http.put<TypedResponse>(
+      this.api + '/groups/' + group_id + '/members',
+      { email }
+    );
+  }
+
+  deleteMember(group_id: string, email: string) {
+    return this.http.delete<TypedResponse>(
+      this.api + '/groups/' + group_id + '/members/' + email
+    );
+  }
 }

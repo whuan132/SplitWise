@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
           <a [routerLink]="['', 'groups', 'detail', g._id]">
             {{ g.title }} - {{ g.members[0].fullname }}
           </a>
-          <button (click)="deleteGroup(g._id)">X</button>
+          <button (click)="deleteGroup(g._id)">x</button>
         </div>
 
         <button (click)="addGroup()">Add New Spending Group</button>

@@ -17,6 +17,7 @@ import { StateService } from '../user/state.service';
           User {{ m.fullname }} spent {{ getSpendBy(m) | currency : 'USD' }} in
           total => owes
           {{ getOwesBy(m) | currency : 'USD' }}
+          <button (click)="deleteMember(m.email)" *ngIf="!isOwner(m)">x</button>
         </div>
 
         <!-- Transactions -->
@@ -28,7 +29,7 @@ import { StateService } from '../user/state.service';
           {{ t.date | date }} - {{ t.title }} - {{ t.description }} -
           {{ t.category }} - User {{ t.paid_by.fullname }} paid
           {{ t.amount | currency : 'USD' }}
-          <button (click)="deleteTransaction(t._id)">X</button>
+          <button (click)="deleteTransaction(t._id)">x</button>
         </div>
 
         <!-- Go Back Button -->
@@ -79,6 +80,10 @@ export class GroupDetailComponent {
     );
   }
 
+  isOwner(member: IMember) {
+    return this.stateService.user().email === member.email;
+  }
+
   getSpend() {
     let total = 0;
     this.group.transactions.forEach((t) => (total += t.amount));
@@ -108,7 +113,22 @@ export class GroupDetailComponent {
     return `User ${member.fullname} spent $${spend} in total => owes $${owes}`;
   }
 
-  inviteMember() {}
+  inviteMember() {
+    this.router.navigate(['', 'groups', 'invite-member', this.groupId]);
+  }
+
+  deleteMember(email: string) {
+    this.groupsService.deleteMember(this.groupId, email).subscribe(
+      (res) => {
+        this.group.members = this.group.members.filter(
+          (t) => t.email !== email
+        );
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
 
   addTransaction() {
     this.router.navigate(['', 'groups', 'add-transaction', this.groupId]);

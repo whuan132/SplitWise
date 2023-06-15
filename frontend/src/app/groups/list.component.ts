@@ -22,8 +22,8 @@ import { StateService } from '../user/state.service';
                   <a [routerLink]="['', 'groups', 'detail', g._id]"
                      [routerLinkActive]="isPending(g) ? 'false' : 'true'"
                      class="flex">
-                      <img class="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-l-lg"
-                           src="../../assets/images/logo.png" alt="">
+<!--                      <img class="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-l-lg"-->
+<!--                           src="../../assets/images/logo.png" alt="">-->
                       <div class="flex flex-col justify-between p-4 leading-normal">
                           <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"> {{ g.title }}
                               - {{ g.members[0].fullname }}</h5>
@@ -54,7 +54,7 @@ import { StateService } from '../user/state.service';
           </div>
 
       </ng-template>
-        <app-modal title="Create A new Group" [fields]="['title']" (add)="addGroup($event)"/>
+        <app-modal title="Create A new Group" [fields]="['title']" button="Create new Group" (add)="addGroup($event)"/>
       </div>
 
 

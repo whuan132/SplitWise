@@ -6,26 +6,11 @@ import {initDials, initTooltips} from "flowbite";
 @Component({
   selector: 'app-root',
   template: `
+    <div class="flex flex-col h-screen justify-between">
+      <router-outlet></router-outlet>
+      <app-footer />
+    </div>
 
-<!--    <header class="nav_header">-->
-<!--      &lt;!&ndash; after sign in &ndash;&gt;-->
-<!--      <nav *ngIf="signed; else signin">-->
-<!--        <a class="nav_link" [routerLink]="['', 'home']">Home</a>-->
-
-<!--        <a class="nav_link" [routerLink]="['', 'groups']">Goups</a>-->
-
-<!--        <a class="nav_link" [routerLink]="['']" (click)="signout()">Sign Out</a>-->
-<!--        <a class="nav_link" [routerLink]="['', 'about']">About</a>-->
-<!--      </nav>-->
-<!--      &lt;!&ndash; before sign in &ndash;&gt;-->
-<!--      <ng-template #signin>-->
-<!--        <a class="nav_link" [routerLink]="['', 'home']">Home</a>-->
-<!--        <a class="nav_link" [routerLink]="['', 'signin']">Sign In</a>-->
-<!--        <a class="nav_link" [routerLink]="['', 'signup']">Sign Up</a>-->
-<!--        <a class="nav_link" [routerLink]="['', 'about']">About</a>-->
-<!--      </ng-template>-->
-<!--    </header>-->
-    <router-outlet></router-outlet>
   `,
   styles: [
     `
@@ -39,15 +24,14 @@ export class AppComponent {
 
   constructor() {
     this.loadStateFromLocalStorage();
-    // Register a new effect.
+
     effect(() => {
       const user = this.stateService.user();
       this.saveStateToLocalStorage(user);
     });
   }
   ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
+
     initTooltips();
     initDials();
   }

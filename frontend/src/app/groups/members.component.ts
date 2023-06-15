@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {IMember} from "./groups.service";
 
 @Component({
@@ -37,7 +37,7 @@ import {IMember} from "./groups.service";
               </div>
             </td>
             <td class="px-6 py-4">
-              <button  class="font-medium text-red-600 dark:text-red-500 hover:underline">Remove</button>
+              <button  class="font-medium text-red-600 dark:text-red-500 hover:underline" (click)="onRemove(member.email)">Remove</button>
             </td>
           </tr>
 
@@ -52,5 +52,11 @@ import {IMember} from "./groups.service";
 })
 export class MembersComponent {
   @Input({required: true, alias: 'members'}) data!: IMember[];
+  @Output('remove') removeMember= new EventEmitter<string>();
+
+  onRemove(email:string){
+    this.removeMember.emit(email)
+
+  }
 
 }

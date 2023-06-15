@@ -2,6 +2,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GroupsService } from './groups.service';
+import {Modal, ModalOptions} from "flowbite";
+
 
 @Component({
   selector: 'app-add-transaction',
@@ -37,15 +39,21 @@ import { GroupsService } from './groups.service';
       <div>
 
           <!-- Modal toggle -->
-<!--          <button data-modal-target="transaction-modal" data-modal-toggle="transaction-modal"-->
-<!--                  class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-3xl px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 rounded-full"-->
-<!--                  type="button">-->
-<!--              +-->
-<!--          </button>-->
-        <button type="button" data-modal-target="transaction-modal" data-modal-toggle="transaction-modal" data-dial-toggle="speed-dial-menu-default" aria-controls="speed-dial-menu-default" aria-expanded="false" class="flex items-center justify-center text-white bg-blue-700 rounded-full w-14 h-14 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none dark:focus:ring-blue-800">
-          <svg aria-hidden="true" class="w-8 h-8 transition-transform group-hover:rotate-45" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-          <span class="sr-only">Open actions menu</span>
-        </button>
+          <!--          <button data-modal-target="transaction-modal" data-modal-toggle="transaction-modal"-->
+          <!--                  class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-3xl px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 rounded-full"-->
+          <!--                  type="button">-->
+          <!--              +-->
+          <!--          </button>-->
+          <button (click)="showModal()" type="button" data-dial-toggle="speed-dial-menu-default"
+                  aria-controls="speed-dial-menu-default" aria-expanded="false"
+                  class="flex items-center justify-center text-white bg-blue-700 rounded-full w-14 h-14 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none dark:focus:ring-blue-800">
+              <svg aria-hidden="true" class="w-8 h-8 transition-transform group-hover:rotate-45" fill="none"
+                   stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+              </svg>
+              <span class="sr-only">Open actions menu</span>
+          </button>
 
           <!-- Main modal -->
           <div id="transaction-modal" tabindex="-1" aria-hidden="true"
@@ -67,26 +75,27 @@ import { GroupsService } from './groups.service';
                       <div class="px-6 py-6 lg:px-8">
                           <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Sign in to our
                               platform</h3>
-                          <form class="space-y-6">
+                          <form class="space-y-6" [formGroup]="transactionForm" (ngSubmit)="addTransaction()">
                               <div>
                                   <label for="title"
                                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Title</label>
                                   <input id="title" name="title" type="text"
                                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                                         placeholder="name@company.com" required>
+                                         placeholder="name@company.com" required formControlName="title">
                               </div>
                               <div>
                                   <label for="description"
                                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
                                   <input id="description" name="description" type="text"
                                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                                         placeholder="name@company.com" required>
+                                         placeholder="name@company.com" required formControlName="description">
                               </div>
 
                               <label for="category"
                                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Categories</label>
                               <select id="category" name="category"
-                                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                      formControlName="category">
                                   <option>FOOD</option>
                                   <option>GAS</option>
                                   <option>MOVIES</option>
@@ -98,13 +107,43 @@ import { GroupsService } from './groups.service';
                                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Amount</label>
                                   <input id="amount" type="number" name="email"
                                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                                         placeholder="name@company.com" required>
+                                         placeholder="name@company.com" required formControlName="amount">
                               </div>
 
 
-                              <button type="submit"
-                                      class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                  Login to your account
+                              <div class="relative max-w-sm">
+                                  <label for="amount"
+                                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date:</label>
+                                  <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                  </div>
+                                  <input type="date"
+                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                         placeholder="Select date" formControlName="date">
+                              </div>
+
+                              <div class="flex items-center justify-center w-full">
+                                  <label for="dropzone-file"
+                                         class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                                      <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                          <svg aria-hidden="true" class="w-10 h-10 mb-3 text-gray-400" fill="none"
+                                               stroke="currentColor" viewBox="0 0 24 24"
+                                               xmlns="http://www.w3.org/2000/svg">
+                                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                          </svg>
+                                          <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span
+                                                  class="font-semibold">Click to upload</span> or drag and drop</p>
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX.
+                                              800x400px)</p>
+                                      </div>
+                                      <input id="dropzone-file" type="file" class="hidden" (change)="pickFile($event)"  formControlName="receiptFile"/>
+                                  </label>
+                              </div>
+
+
+                              <button [disabled]="!transactionForm.valid" type="submit"
+                                      class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:bg-blue-400 disabled:cursor-not-allowed">
+                                  Add a Transaction
                               </button>
 
                           </form>
@@ -137,11 +176,11 @@ export class AddTransactionComponent {
   private route = inject(ActivatedRoute);
   private groupsService = inject(GroupsService);
 
-  // ngOnInit() {
-  //   this.route.paramMap.subscribe((params) => {
-  //     this.groupId = params.get('group_id') as string;
-  //   });
-  // }
+  constructor() {
+    this.route.paramMap.subscribe((params) => {
+      this.groupId = params.get('group_id') as string;
+    });
+  }
 
   pickFile(event: Event) {
     const input_element = event.target as HTMLInputElement;
@@ -177,5 +216,28 @@ export class AddTransactionComponent {
 
   goBack() {
     this.router.navigate(['', 'groups', 'detail', this.groupId]);
+  }
+  showModal(){
+
+    const $modalElement = document.querySelector('#transaction-modal') as HTMLElement;
+
+    const modalOptions = {
+      placement: 'center',
+      backdrop: 'dynamic',
+      backdropClasses: 'bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40',
+      onHide: () => {
+        console.log('modal is hidden');
+      },
+      onShow: () => {
+        console.log('modal is shown');
+      },
+      onToggle: () => {
+        console.log('modal has been toggled');
+      }
+    }
+
+    const modal = new Modal($modalElement, modalOptions as ModalOptions);
+
+    modal.show();
   }
 }

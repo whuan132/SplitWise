@@ -15,6 +15,7 @@ import {
   HTTP_INTERCEPTORS,
 } from '@angular/common/http';
 import {NgIf} from "@angular/common";
+import { FooterComponent } from './footer.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import {NgIf} from "@angular/common";
     SignupComponent,
     HomeComponent,
     AboutComponent,
+    FooterComponent,
 
   ],
   imports: [

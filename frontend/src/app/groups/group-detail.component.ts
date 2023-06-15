@@ -170,8 +170,13 @@ export class GroupDetailComponent {
   getOwesBy(member: string) {
     let total = this.getSpend();
     let spend = this.getSpendBy(member);
-    let owes = total / this.group.members.length - spend;
-    return owes;
+    let length = 0;
+    this.group.members.forEach((m) => {
+      if(!m.pending){
+        length++;
+      }
+    });
+    return total / length - spend;
   }
 
   getMemberStr(member: string) {

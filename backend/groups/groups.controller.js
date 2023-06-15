@@ -1,4 +1,5 @@
 import groupsModel from "./groups.model.js";
+import mongoose from "mongoose";
 
 export const get_groups = async (req, res, next) => {
   try {
@@ -127,6 +128,7 @@ export const add_transaction = async (req, res, next) => {
         filename,
         originalname,
       },
+      _id: new mongoose.Types.ObjectId(),
     };
     const results = await groupsModel.updateOne(
       {
@@ -139,7 +141,7 @@ export const add_transaction = async (req, res, next) => {
         },
       }
     );
-    res.json({ success: true, data: results });
+    res.json({ success: true, data: trans });
   } catch (error) {
     next(error);
   }

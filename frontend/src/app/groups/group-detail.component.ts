@@ -135,7 +135,8 @@ import { initDials, initTooltips } from 'flowbite';
           *ngIf="showTrasactions"
         />
         <app-members
-          [members]="group.members"
+          [group]="group"
+
           *ngIf="showMembers"
           (remove)="deleteMember($event)"
         />

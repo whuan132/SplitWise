@@ -121,7 +121,7 @@ export const add_transaction = async (req, res, next) => {
       title,
       description,
       category,
-      amount: parseInt(amount),
+      amount: parseFloat(amount),
       date: new Date(date).getTime(),
       paid_by: { user_id: token._id, fullname: token.fullname },
       receipt: {

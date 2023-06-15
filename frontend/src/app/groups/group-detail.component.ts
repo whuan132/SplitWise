@@ -1,8 +1,9 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { GroupsService, IGroup, IMember, ITransaction } from './groups.service';
 import { StateService } from '../user/state.service';
 import { initDials, initTooltips } from 'flowbite';
+import { GroupHelper, IGroupResult } from '../utils/GroupHelper';
 
 @Component({
   selector: 'app-group-detail',
@@ -51,19 +52,31 @@ import { initDials, initTooltips } from 'flowbite';
                 <div class="flex flex-col justify-center items-center">
                   <p>Total Money Spent:</p>
                   <p class="text-4xl font-bold text-red-500">
-                    {{ getSpend() | currency }}
+                    {{ groupResult.total | currency }}
                   </p>
                 </div>
                 <div class="flex flex-col justify-center items-center">
                   <p>Total Money Spent by you:</p>
                   <p class="text-4xl font-bold text-green-500">
-                    {{ getSpendBy(stateService.user()._id) | currency }}
+                    {{
+                      groupResult.members[stateService.user()._id].spend
+                        | currency
+                    }}
                   </p>
                 </div>
                 <div class="flex flex-col justify-center items-center">
                   <p>Total Money You Owe:</p>
-                  <p [class]="colorizeOwe(getOwesBy(stateService.user()._id))">
-                    {{ getOwesBy(stateService.user()._id) | currency }}
+                  <p
+                    [class]="
+                      colorizeOwe(
+                        groupResult.members[stateService.user()._id].owes
+                      )
+                    "
+                  >
+                    {{
+                      groupResult.members[stateService.user()._id].owes
+                        | currency
+                    }}
                   </p>
                 </div>
               </div>
@@ -136,14 +149,14 @@ import { initDials, initTooltips } from 'flowbite';
         />
         <app-members
           [group]="group"
-
+          [groupResult]="groupResult"
           *ngIf="showMembers"
           (remove)="deleteMember($event)"
         />
         <div class="mt-3 max-w-2xl mx-auto flex justify-end">
           <app-add-transaction
             [groupName]="group.title"
-            [amount_owed]="getOwesBy(stateService.user()._id)"
+            [amount_owed]="groupResult.members[stateService.user()._id].owes"
             *ngIf="!showMembers"
             (transaction)="pushTransaction($event)"
           />
@@ -158,11 +171,13 @@ import { initDials, initTooltips } from 'flowbite';
   `,
   styles: [``],
 })
-export class GroupDetailComponent {
+export class GroupDetailComponent implements OnInit {
   showTrasactions = true;
   showMembers = false;
+
   group!: IGroup;
   groupId!: string;
+  groupResult!: IGroupResult;
 
   private router = inject(Router);
   private route = inject(ActivatedRoute);
@@ -184,6 +199,7 @@ export class GroupDetailComponent {
       (res) => {
         console.log(res.data);
         const myEmail = this.stateService.user().email;
+        this.groupResult = GroupHelper.compute(res.data as IGroup);
         this.group = res.data as IGroup;
         this.group.members.sort((m) => (m.email !== myEmail ? 0 : -1));
       },
@@ -191,58 +207,6 @@ export class GroupDetailComponent {
         console.log(error);
       }
     );
-  }
-
-  isOwner(member: string) {
-    return this.stateService.user().email === member;
-  }
-
-  getSpend() {
-    let total = 0;
-    this.group.transactions
-      .filter((x) => x.category !== 'PAYBACK')
-      .forEach((t) => (total += t.amount));
-
-    return total;
-  }
-
-  getSpendBy(member: string) {
-    let total = 0;
-    this.group.transactions
-      .filter((x) => x.category !== 'PAYBACK')
-      .forEach((t) => {
-        if (t.paid_by.user_id == member) {
-          total += t.amount;
-        }
-      });
-    return total;
-  }
-  getSpendBywithPayback(member: string) {
-    let total = 0;
-    this.group.transactions.forEach((t) => {
-      if (t.paid_by.user_id == member) {
-        total += t.amount;
-      }
-    });
-    return total;
-  }
-
-  getOwesBy(member: string) {
-    let total = this.getSpend();
-    let spend = this.getSpendBywithPayback(member);
-    let length = 0;
-    this.group.members.forEach((m) => {
-      if (!m.pending) {
-        length++;
-      }
-    });
-    return total / length - spend;
-  }
-
-  getMemberStr(member: string) {
-    let spend = this.getSpendBy(member);
-    let owes = this.getOwesBy(member);
-    // return `User ${member.fullname} spent $${spend} in total => owes $${owes}`;
   }
 
   onInviteMember(email: string) {

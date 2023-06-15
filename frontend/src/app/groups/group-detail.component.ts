@@ -255,5 +255,6 @@ export class GroupDetailComponent implements OnInit {
   }
   pushTransaction(transaction: ITransaction) {
     this.group.transactions.unshift(transaction);
+    this.groupResult = GroupHelper.compute(this.group);
   }
 }

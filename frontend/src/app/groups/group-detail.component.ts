@@ -129,6 +129,7 @@ import { initDials, initTooltips } from 'flowbite';
 
       <div class="w-full">
         <app-transaction
+          [groupId]="groupId"
           [transactions]="group.transactions"
           (remove)="deleteTransaction($event)"
           *ngIf="showTrasactions"

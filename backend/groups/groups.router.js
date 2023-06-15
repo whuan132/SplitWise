@@ -9,6 +9,7 @@ import {
   delete_group,
   add_transaction,
   delete_transaction,
+  get_receipt,
   add_member,
   delete_member,
 } from "../groups/groups.controller.js";
@@ -30,6 +31,7 @@ router.put(
   add_transaction
 );
 router.delete("/:group_id/transactions/:transaction_id", delete_transaction);
+router.get("/:group_id/transactions/:transaction_id/receipt", get_receipt);
 
 router.put("/:group_id/members", add_member);
 router.delete("/:group_id/members/:email", delete_member);

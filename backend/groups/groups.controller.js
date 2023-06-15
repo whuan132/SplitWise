@@ -1,5 +1,8 @@
 import groupsModel from "./groups.model.js";
 import mongoose from "mongoose";
+import path from "path";
+import { fileURLToPath } from "url";
+import fs from "fs";
 
 export const get_groups = async (req, res, next) => {
   try {
@@ -164,6 +167,39 @@ export const delete_transaction = async (req, res, next) => {
       }
     );
     res.json({ success: true, data: results });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const get_receipt = async (req, res, next) => {
+  try {
+    const token = req.body["tokenData"];
+    const { group_id, transaction_id } = req.params;
+    const results = await groupsModel.findOne({
+      _id: group_id,
+      "members.user_id": token._id,
+      "members.pending": false,
+      "transactions._id": transaction_id,
+    });
+    if (results && results.transactions) {
+      const receipt = results.transactions.find(
+        (t) => t._id.toString() === transaction_id
+      );
+      if (receipt && receipt.receipt) {
+        const __filename = fileURLToPath(import.meta.url);
+        const __dirname = path.dirname(__filename);
+        const file_path = path.join(
+          __dirname,
+          "..",
+          "uploads",
+          receipt.receipt.filename
+        );
+        res.download(file_path, receipt.receipt.originalname);
+        return;
+      }
+      throw new Error("Receipt not found");
+    }
   } catch (error) {
     next(error);
   }

@@ -1,5 +1,5 @@
 import TypedResponse from '../types/TypedResponse.interface';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { StateService } from '../user/state.service';
 
@@ -87,6 +87,19 @@ export class GroupsService {
   deleteMember(group_id: string, email: string) {
     return this.http.delete<TypedResponse>(
       this.api + '/groups/' + group_id + '/members/' + email
+    );
+  }
+
+  downloadReceipt(group_id: string, transaction_id: string) {
+    const headers = new HttpHeaders({ 'Content-Type': 'image/jpeg' });
+    return this.http.get(
+      this.api +
+        '/groups/' +
+        group_id +
+        '/transactions/' +
+        transaction_id +
+        '/receipt',
+      { responseType: 'blob', headers }
     );
   }
 }

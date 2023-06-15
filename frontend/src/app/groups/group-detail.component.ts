@@ -1,6 +1,6 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, inject } from '@angular/core';
-import { GroupsService, IGroup, IMember } from './groups.service';
+import {GroupsService, IGroup, IMember, ITransaction} from './groups.service';
 import { StateService } from '../user/state.service';
 import {initDials, initTooltips} from "flowbite";
 
@@ -74,10 +74,10 @@ import {initDials, initTooltips} from "flowbite";
                   </div>
               </section>
           </div>
-          <div class="max-w-2xl mx-auto mb-10">
+          <div class="max-w-2xl mx-auto mb-5">
 
               <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
-                  <ul class="flex flex-wrap -mb-px justify-around">
+                  <ul class="flex flex-wrap  justify-around">
                       <li class="mr-2">
                           <a (click)="showTrasactions=true; showMembers=false"
                              class=" cursor-pointer inline-block p-4 hover:text-blue-600 active:border-b-2 border-blue-600 rounded-t-lg  active:text-blue-500 active:border-blue-500"
@@ -95,11 +95,13 @@ import {initDials, initTooltips} from "flowbite";
           </div>
 
           <div class="w-full">
-              <app-transaction [transactions]="group.transactions" (remove)="deleteTransaction($event)"
+
+
+            <app-transaction [transactions]="group.transactions" (remove)="deleteTransaction($event)"
                                *ngIf="showTrasactions"/>
               <app-members [members]="group.members" *ngIf="showMembers" (remove)="deleteMember($event)"/>
-              <div class="mt-10 max-w-2xl mx-auto flex justify-end">
-                <app-add-transaction *ngIf="!showMembers "/>
+              <div class="mt-3 max-w-2xl mx-auto flex justify-end">
+                <app-add-transaction [groupName]="group.title" [amount_owed]="getOwesBy(stateService.user()._id)"  *ngIf="!showMembers " (transaction)="pushTransaction($event)"/>
                <app-invite-member *ngIf="showMembers"/>
               </div>
           </div>
@@ -153,11 +155,21 @@ export class GroupDetailComponent {
 
   getSpend() {
     let total = 0;
-    this.group.transactions.forEach((t) => (total += t.amount));
+    this.group.transactions.filter(x=>x.category!=="PAYBACK").forEach((t) => (total += t.amount));
+
     return total;
   }
 
   getSpendBy(member: string) {
+    let total = 0;
+    this.group.transactions.filter(x=>x.category!=="PAYBACK").forEach((t) => {
+      if (t.paid_by.user_id == member) {
+        total += t.amount;
+      }
+    });
+    return total;
+  }
+  getSpendBywithPayback(member: string) {
     let total = 0;
     this.group.transactions.forEach((t) => {
       if (t.paid_by.user_id == member) {
@@ -169,7 +181,7 @@ export class GroupDetailComponent {
 
   getOwesBy(member: string) {
     let total = this.getSpend();
-    let spend = this.getSpendBy(member);
+    let spend = this.getSpendBywithPayback(member);
     let length = 0;
     this.group.members.forEach((m) => {
       if(!m.pending){
@@ -225,6 +237,9 @@ export class GroupDetailComponent {
   colorizeOwe(amount: number): string{
     if(amount<=0) return "text-4xl font-bold text-green-500"
     else return "text-4xl font-bold text-red-500"
+  }
+  pushTransaction(transaction: ITransaction){
+    this.group.transactions.unshift(transaction);
   }
 
 

@@ -1,7 +1,7 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, inject } from '@angular/core';
+import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { GroupsService } from './groups.service';
+import {GroupsService, ITransaction} from './groups.service';
 import {Modal, ModalOptions} from "flowbite";
 
 
@@ -61,20 +61,12 @@ import {Modal, ModalOptions} from "flowbite";
               <div class="relative w-full max-w-md max-h-full">
                   <!-- Modal content -->
                   <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                      <button type="button"
-                              class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
-                              data-modal-hide="transaction-modal">
-                          <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                               xmlns="http://www.w3.org/2000/svg">
-                              <path fill-rule="evenodd"
-                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                    clip-rule="evenodd"></path>
-                          </svg>
-                          <span class="sr-only">Close modal</span>
-                      </button>
+
                       <div class="px-6 py-6 lg:px-8">
-                          <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Sign in to our
-                              platform</h3>
+                        <button [disabled]="amount_owed<=0" (click)="fillPaymentInfo()" class="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:bg-green-400 disabled:cursor-not-allowed my-3">
+                          Settle
+                        </button>
+                          <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Add a new Transaction</h3>
                           <form class="space-y-6" [formGroup]="transactionForm" (ngSubmit)="addTransaction()">
                               <div>
                                   <label for="title"
@@ -100,7 +92,11 @@ import {Modal, ModalOptions} from "flowbite";
                                   <option>GAS</option>
                                   <option>MOVIES</option>
                                   <option>DRINKS</option>
-                                  <option>OTHER</option>
+                                  <option>RENT</option>
+                                  <option>GROCERIES</option>
+                                  <option>BILLS</option>
+                                    <option>PAYBACK</option>
+                                  <option>OTHERS</option>
                               </select>
                               <div>
                                   <label for="amount"
@@ -141,7 +137,7 @@ import {Modal, ModalOptions} from "flowbite";
                               </div>
 
 
-                              <button [disabled]="!transactionForm.valid" type="submit"
+                              <button [disabled]="!transactionForm.valid" type="submit" data-modal-hide="transaction-modal" id="close-icon"
                                       class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:bg-blue-400 disabled:cursor-not-allowed">
                                   Add a Transaction
                               </button>
@@ -163,13 +159,16 @@ import {Modal, ModalOptions} from "flowbite";
 export class AddTransactionComponent {
   groupId!: string;
   receipt!: File;
+  @Output('transaction') transaction= new EventEmitter<ITransaction>();
+  @Input({required: true,alias:'amount_owed'}) amount_owed! :number;
+  @Input({required: true,alias:'groupName'}) group_name! :string;
   transactionForm = inject(FormBuilder).group({
     title: ['', Validators.required],
     description: ['', Validators.required],
     category: ['', Validators.required],
     amount: ['', Validators.required],
     date: ['', Validators.required],
-    receiptFile: '',
+    receiptFile: [,Validators.required],
   });
 
   private router = inject(Router);
@@ -206,12 +205,15 @@ export class AddTransactionComponent {
     this.groupsService.addTransaction(this.groupId, form_data).subscribe(
       (res) => {
         console.log(res);
-        this.goBack();
+        this.transaction.emit(res.data as ITransaction)
+
       },
       (error) => {
         console.log(error);
       }
     );
+
+
   }
 
   goBack() {
@@ -239,5 +241,33 @@ export class AddTransactionComponent {
     const modal = new Modal($modalElement, modalOptions as ModalOptions);
 
     modal.show();
+    const icon = document.getElementById('close-icon');
+    if(icon)
+      icon.addEventListener('click', () => {
+        modal.hide();
+      })
+  }
+
+  protected readonly EventEmitter = EventEmitter;
+  fillPaymentInfo(){
+    this.transactionForm.get('title')?.setValue("Payment")
+    this.transactionForm.get('category')?.setValue("PAYBACK")
+    this.transactionForm.get('amount')?.setValue(this.amount_owed.toString())
+    this.transactionForm.get('date')?.setValue(this.formatDate(Date.now()))
+    this.transactionForm.get('description')?.setValue(`Making payment for spend group ${this.group_name} on coinsplit`)
+
+  }
+  formatDate(date :number) {
+    var d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2)
+      month = '0' + month;
+    if (day.length < 2)
+      day = '0' + day;
+
+    return [year, month, day].join('-');
   }
 }

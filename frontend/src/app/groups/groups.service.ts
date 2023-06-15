@@ -11,8 +11,8 @@ export interface IGroup {
 }
 
 export interface IMember {
-  user_id: string;
-  fullname: string;
+  user_id?: string;
+  fullname?: string;
   email: string;
   pending: boolean;
 }

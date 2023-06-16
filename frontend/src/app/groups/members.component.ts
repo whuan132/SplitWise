@@ -44,17 +44,18 @@ import { IGroupResult } from '../utils/GroupHelper';
           aria-labelledby="accordion-example-heading-1"
         >
           <div
+            *ngIf="result.members[user.user_id || '']"
             class="p-5 border rounded-lg border-gray-200 dark:border-gray-700 dark:bg-gray-900"
           >
             <div class="flex justify-around mb-2.5">
               <div class="flex flex-col justify-center items-center ">
-                <p>Total Money Spent by {{ user.fullname }}:</p>
+                <p>Spent:</p>
                 <p class="text-4xl font-bold text-green-500">
                   {{ result.members[user.user_id || ''].spend | currency }}
                 </p>
               </div>
               <div class="flex flex-col justify-center items-center">
-                <p>Total Money {{ user.fullname }} Owes:</p>
+                <p>Owes:</p>
                 <p
                   [class]="colorizeOwe(result.members[user.user_id || ''].owes)"
                 >

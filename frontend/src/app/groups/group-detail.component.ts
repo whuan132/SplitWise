@@ -35,86 +35,43 @@ import { GroupHelper, IGroupResult } from '../utils/GroupHelper';
 
     <app-header />
     <ng-template #details>
-      <div class="mt-20 max-w-4xl mx-auto">
-        <section class="bg-white dark:bg-gray-900">
-          <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16">
-            <div
-              class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-8 md:p-12 mb-8"
-            >
-              <h1
-                class="text-gray-900 dark:text-white text-3xl md:text-5xl font-extrabold mb-2"
-              >
-                {{ group.title }}
-              </h1>
-              <div
-                class=" flex border border-gray-300 rounded-lg p-5 m-5 justify-around"
-              >
-                <div class="flex flex-col justify-center items-center">
-                  <p>Total Money Spent:</p>
-                  <p class="text-4xl font-bold text-red-500">
-                    {{ groupResult.total | currency }}
-                  </p>
-                </div>
-                <div class="flex flex-col justify-center items-center">
-                  <p>Total Money Spent by you:</p>
-                  <p class="text-4xl font-bold text-green-500">
-                    {{
-                      groupResult.members[stateService.user()._id].spend
-                        | currency
-                    }}
-                  </p>
-                </div>
-                <div class="flex flex-col justify-center items-center">
-                  <p>Total Money You Owe:</p>
-                  <p
-                    [class]="
-                      colorizeOwe(
-                        groupResult.members[stateService.user()._id].owes
-                      )
-                    "
-                  >
-                    {{
-                      groupResult.members[stateService.user()._id].owes
-                        | currency
-                    }}
-                  </p>
-                </div>
-              </div>
-              <a
-                (click)="showMembers = true; showTrasactions = false"
-                class=" mb-4 cursor-pointer inline-flex justify-center items-center py-2.5 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
-              >
-                show Members
-                <svg
-                  aria-hidden="true"
-                  class="ml-2 -mr-1 w-4 h-4"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-              </a>
-
-              <p
-                class="text-lg font-normal  text-gray-500 dark:text-gray-400 line-clamp-2"
-              >
-                Static websites are now used to bootstrap lots of websites and
-                are becoming the basis for a variety of tools that even
-                influence both web designers and developers.
-              </p>
-            </div>
-
-            <!-- Modal toggle -->
-
-            <div class="grid md:grid-cols-2 gap-8"></div>
+      <div class="mt-20 max-w-4xl mx-auto w-full">
+        <h2
+          class="mb-4 text-2xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-4xl dark:text-white"
+        >
+          {{ group.title }}
+        </h2>
+        <div
+          class=" flex border border-gray-300 rounded-lg p-5 m-5 justify-around"
+        >
+          <div class="flex flex-col justify-center items-center">
+            <p>Total:</p>
+            <p class="text-4xl font-bold text-red-500">
+              {{ groupResult.total | currency }}
+            </p>
           </div>
-        </section>
+          <div class="flex flex-col justify-center items-center">
+            <p>Spent:</p>
+            <p class="text-4xl font-bold text-green-500">
+              {{
+                groupResult.members[stateService.user()._id].spend | currency
+              }}
+            </p>
+          </div>
+          <div class="flex flex-col justify-center items-center">
+            <p>Owe:</p>
+            <p
+              [class]="
+                colorizeOwe(groupResult.members[stateService.user()._id].owes)
+              "
+            >
+              {{ groupResult.members[stateService.user()._id].owes | currency }}
+            </p>
+          </div>
+        </div>
       </div>
+
+      <!-- Transactions and Members -->
       <div class="max-w-2xl mx-auto mb-5">
         <div
           class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700"
@@ -199,9 +156,9 @@ export class GroupDetailComponent implements OnInit {
       (res) => {
         console.log(res.data);
         const myEmail = this.stateService.user().email;
-        this.groupResult = GroupHelper.compute(res.data as IGroup);
         this.group = res.data as IGroup;
         this.group.members.sort((m) => (m.email !== myEmail ? 0 : -1));
+        this.groupResult = GroupHelper.compute(this.group);
       },
       (error) => {
         console.log(error);
@@ -214,6 +171,7 @@ export class GroupDetailComponent implements OnInit {
       email: email,
       pending: true,
     });
+    this.groupResult = GroupHelper.compute(this.group);
   }
 
   deleteMember(email: string) {
@@ -222,15 +180,12 @@ export class GroupDetailComponent implements OnInit {
         this.group.members = this.group.members.filter(
           (t) => t.email !== email
         );
+        this.groupResult = GroupHelper.compute(this.group);
       },
       (error) => {
         console.log(error);
       }
     );
-  }
-
-  addTransaction() {
-    this.router.navigate(['', 'groups', 'add-transaction', this.groupId]);
   }
 
   deleteTransaction(trans_id: string) {
@@ -239,6 +194,7 @@ export class GroupDetailComponent implements OnInit {
         this.group.transactions = this.group.transactions.filter(
           (t) => t._id !== trans_id
         );
+        this.groupResult = GroupHelper.compute(this.group);
       },
       (error) => {
         console.log(error);
@@ -246,13 +202,11 @@ export class GroupDetailComponent implements OnInit {
     );
   }
 
-  goBack() {
-    this.router.navigate(['', 'groups']);
-  }
   colorizeOwe(amount: number): string {
     if (amount <= 0) return 'text-4xl font-bold text-green-500';
     else return 'text-4xl font-bold text-red-500';
   }
+
   pushTransaction(transaction: ITransaction) {
     this.group.transactions.unshift(transaction);
     this.groupResult = GroupHelper.compute(this.group);

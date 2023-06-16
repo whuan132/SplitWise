@@ -79,6 +79,16 @@ export const GroupHelper = {
             }
             delta = amount / length;
             delta = Math.max(0.01, delta);
+
+            let remain = 0;
+            for (let e in result.members) {
+              const r2 = result.members[e];
+              if (e !== t.paid_by.user_id) {
+                remain += r2.owes;
+              }
+            }
+            if (Math.abs(remain) < epsilon) break;
+
             // console.log(delta, amount);
           }
         });

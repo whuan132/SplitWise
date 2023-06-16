@@ -69,10 +69,8 @@ import { GroupHelper, IGroupResult } from '../utils/GroupHelper';
             </p>
           </div>
         </div>
-      </div>
 
-      <!-- Transactions and Members -->
-      <div class="max-w-2xl mx-auto mb-5">
+        <!-- Transactions and Members -->
         <div
           class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700"
         >
@@ -95,9 +93,8 @@ import { GroupHelper, IGroupResult } from '../utils/GroupHelper';
             </li>
           </ul>
         </div>
-      </div>
 
-      <div class="w-full">
+        <!-- Modals -->
         <app-transaction
           [groupId]="groupId"
           [transactions]="group.transactions"

@@ -54,9 +54,11 @@ export const GroupHelper = {
     const epsilon = 0.000001;
     members.forEach((m) => {
       let r = result.members[m.user_id as string];
-      r.owes = r.owes - r.spend - r.payback;
-      if (Math.abs(r.owes) < epsilon) {
-        r.owes = 0;
+      if (r.owes > 0) {
+        r.owes = r.owes - r.spend - r.payback;
+        if (Math.abs(r.owes) < epsilon) {
+          r.owes = 0;
+        }
       }
 
       group.transactions

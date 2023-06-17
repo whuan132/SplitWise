@@ -64,8 +64,7 @@ import { IGroupResult } from '../utils/GroupHelper';
               </div>
             </div>
             <div class="flex justify-end">
-              <a
-                class="cursor-pointer inline-flex justify-center items-center py-2.5 px-5 text-sm text-blue-500  text-center  rounded-lg  hover:ring-blue-800 focus:ring-4 focus:ring-blue-300 "
+              <a (click)="showMembers(user.user_id)" class="cursor-pointer inline-flex justify-center items-center py-2.5 px-5 text-sm text-blue-500  text-center  rounded-lg  hover:ring-blue-800 focus:ring-4 focus:ring-blue-300 "
               >
                 show Transaction
                 <svg
@@ -94,6 +93,7 @@ export class MembersComponent implements AfterViewInit {
   @Input({ required: true, alias: 'group' }) group!: IGroup;
   @Input({ required: true, alias: 'groupResult' }) result!: IGroupResult;
   @Output('remove') removeMember = new EventEmitter<string>();
+  @Output('showMemberTransaction') showMemberTransaction = new EventEmitter<string>();
   accordionItems!: AccordionItem[];
   members!: AccordionInterface;
 
@@ -146,5 +146,8 @@ export class MembersComponent implements AfterViewInit {
   colorizeOwe(amount: number): string {
     if (amount <= 0) return 'text-4xl font-bold text-green-500';
     else return 'text-4xl font-bold text-red-500';
+  }
+  showMembers(id : string | undefined){
+    this.showMemberTransaction.emit(id as string);
   }
 }

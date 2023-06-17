@@ -99,13 +99,17 @@ import { GroupHelper, IGroupResult } from '../utils/GroupHelper';
           [groupId]="groupId"
           [transactions]="group.transactions"
           (remove)="deleteTransaction($event)"
+          [filterUser]="filter"
           *ngIf="showTrasactions"
+
         />
         <app-members
+
           [group]="group"
           [groupResult]="groupResult"
           *ngIf="showMembers"
           (remove)="deleteMember($event)"
+          (showMemberTransaction)="showMembersTransaction($event)"
         />
         <div class="mt-3 max-w-2xl mx-auto flex justify-end">
           <app-add-transaction
@@ -132,7 +136,7 @@ export class GroupDetailComponent implements OnInit {
   group!: IGroup;
   groupId!: string;
   groupResult!: IGroupResult;
-
+  filter= '';
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private groupsService = inject(GroupsService);
@@ -207,5 +211,11 @@ export class GroupDetailComponent implements OnInit {
   pushTransaction(transaction: ITransaction) {
     this.group.transactions.unshift(transaction);
     this.groupResult = GroupHelper.compute(this.group);
+  }
+  showMembersTransaction(id :string){
+    this.showMembers=false
+    this.showTrasactions= true;
+    this.filter=id;
+
   }
 }

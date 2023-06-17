@@ -35,14 +35,14 @@ import { GroupHelper, IGroupResult } from '../utils/GroupHelper';
 
     <app-header />
     <ng-template #details>
-      <div class="mt-20 max-w-4xl mx-auto w-full">
+      <div class="mt-20 mx-auto w-full items-start md:max-w-2xl">
         <h2
           class="mb-4 text-2xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-4xl dark:text-white"
         >
           {{ group.title }}
         </h2>
         <div
-          class=" flex border border-gray-300 rounded-lg p-5 m-5 justify-around"
+          class=" flex border w-auto border-gray-300 rounded-lg p-2 justify-around"
         >
           <div class="flex flex-col justify-center items-center">
             <p>Total:</p>
@@ -74,20 +74,28 @@ import { GroupHelper, IGroupResult } from '../utils/GroupHelper';
         <div
           class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700"
         >
-          <ul class="flex flex-wrap  justify-around">
+          <ul class="flex flex-wrap justify-around">
             <li class="mr-2">
               <a
                 (click)="showTrasactions = true; showMembers = false"
-                class=" cursor-pointer inline-block p-4 hover:text-blue-600 active:border-b-2 border-blue-600 rounded-t-lg  active:text-blue-500 active:border-blue-500"
-                aria-current="page"
-                >Transactions</a
-              >
+                [ngClass]="
+                  showTrasactions
+                    ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500'
+                    : 'border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300'
+                "
+                class="cursor-pointer inline-block p-4"
+                >Transactions
+              </a>
             </li>
             <li class="mr-2">
               <a
                 (click)="showTrasactions = false; showMembers = true"
-                class=" cursor-pointer inline-block p-4 hover:text-blue-600 active:border-b-2 border-blue-600 rounded-t-lg  active:text-blue-500 active:border-blue-500"
-                aria-current="page"
+                [ngClass]="
+                  showMembers
+                    ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500'
+                    : 'border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300'
+                "
+                class="cursor-pointer inline-block p-4"
                 >Members</a
               >
             </li>

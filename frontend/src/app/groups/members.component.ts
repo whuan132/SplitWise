@@ -61,7 +61,7 @@ import { IGroupResult } from '../utils/GroupHelper';
                 </p>
               </div>
               <div class="flex flex-col justify-center items-center">
-                <p>Owes:</p>
+                <p>Owe:</p>
                 <p
                   [class]="colorizeOwe(result.members[user.user_id || ''].owes)"
                 >

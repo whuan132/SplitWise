@@ -6,7 +6,7 @@ import { Modal, ModalOptions } from 'flowbite';
 @Component({
   selector: 'app-invite-member',
   template: `
-    <div>
+    <div class="fixed right-2 bottom-2">
       <!-- Modal toggle -->
       <button
         (click)="showModal()"
@@ -30,9 +30,10 @@ import { Modal, ModalOptions } from 'flowbite';
             d="M12 6v6m0 0v6m0-6h6m-6 0H6"
           ></path>
         </svg>
-        <span class="sr-only">Open actions menu</span>
       </button>
+    </div>
 
+    <div>
       <!-- Main modal -->
       <div
         id="member-modal"

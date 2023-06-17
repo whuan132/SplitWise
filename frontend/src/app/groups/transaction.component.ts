@@ -13,37 +13,38 @@ import { StateService } from '../user/state.service';
   selector: 'app-transaction',
   template: `
     <div class="max-w-2xl mx-auto">
-      <p class="text-xs text-gray-600">filters:</p>
-      <div class="flex items-center space-x-2 justify-between ">
-        <div class="flex space-x-2">
-          <button
-            type="button"
-            class="text-gray-900 border border-gray-300  hover:border-gray-200  bg-white focus:ring-2 text-xs focus:outline-none  rounded-full  font-medium px-2  text-center  focus:ring-gray-800"
-            (click)="filter('')"
-          >
-            All
-          </button>
-
-          <div class="flex" *ngFor="let category of categories">
+      <div class="mt-5 flex items-center space-x-2 justify-between ">
+        <div class="flex space-x-2 items-center">
+          <p class="block text-sm font-medium text-gray-900 dark:text-white">
+            Filters:
+          </p>
+          <div class="flex space-x-2">
             <button
               type="button"
-              class="text-gray-900 border border-gray-300 py-1 px-3 hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-2 focus:outline-none focus:ring-gray-300 rounded-full text-xs font-medium  text-center dark:text-white dark:focus:ring-gray-800"
-              (click)="filter(category)"
+              class="text-gray-900 border border-gray-300  hover:border-gray-200  bg-white focus:ring-2 text-xs focus:outline-none  rounded-full  font-medium px-2  text-center  focus:ring-gray-800"
+              (click)="filter('')"
             >
-              {{ category | titlecase }}
+              All
             </button>
+
+            <div class="flex" *ngFor="let category of categories">
+              <button
+                type="button"
+                class="text-gray-900 border border-gray-300 py-1 px-3 hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-2 focus:outline-none focus:ring-gray-300 rounded-full text-xs font-medium  text-center dark:text-white dark:focus:ring-gray-800"
+                (click)="filter(category)"
+              >
+                {{ category | titlecase }}
+              </button>
+            </div>
           </div>
         </div>
+
         <div>
-          <div class="flex items-center">
-            <label
-              for="category"
-              class="block  text-sm font-medium text-gray-900 dark:text-white"
-              >sortby:</label
-            >
+          <div class="flex space-x-2 items-center">
+            <p class="block text-sm font-medium text-gray-900 dark:text-white">
+              SortBy:
+            </p>
             <select
-              id="category"
-              name="category"
               class="bg-gray-50  border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               (change)="sortTransactions(Sort.value)"
               #Sort
@@ -93,12 +94,16 @@ import { StateService } from '../user/state.service';
           </h3>
           <time
             class="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500"
-            >Paid by<span class="hover:text-blue-600 cursor-pointer" (click)="filterByUser(transaction.paid_by.user_id)"> {{ transaction.paid_by.fullname }}</span> on
-            {{ transaction.date | date }}</time
+            >Paid by<span
+              class="hover:text-blue-600 cursor-pointer"
+              (click)="filterByUser(transaction.paid_by.user_id)"
+            >
+              {{ transaction.paid_by.fullname }}</span
+            >
+            on {{ transaction.date | date }}</time
           >
           <p
             class="mb-4 text-xl  font-bold text-gray-500 dark:text-gray-400 line-clamp-2"
-            *ngIf="transaction.category === 'PAYBACK'"
           >
             {{ transaction.amount | currency }}
           </p>
@@ -166,10 +171,10 @@ export class TransactionComponent implements OnInit {
       this.categories.add(trans.category);
     });
     console.log(this.categories);
-    if (this.filterUser){
-      this.transactions_filter=this.transactions.filter(trans=>
-         trans.paid_by.user_id===this.filterUser
-      )
+    if (this.filterUser) {
+      this.transactions_filter = this.transactions.filter(
+        (trans) => trans.paid_by.user_id === this.filterUser
+      );
     }
   }
   filter(category: string) {
@@ -225,12 +230,12 @@ export class TransactionComponent implements OnInit {
       }
     );
   }
-  filterByUser(id: string){
-    this.filterUser=id;
-    if (this.filterUser){
-      this.transactions_filter=this.transactions.filter(trans=>
-        trans.paid_by.user_id===this.filterUser
-      )
+  filterByUser(id: string) {
+    this.filterUser = id;
+    if (this.filterUser) {
+      this.transactions_filter = this.transactions.filter(
+        (trans) => trans.paid_by.user_id === this.filterUser
+      );
     }
   }
 }

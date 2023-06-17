@@ -1,24 +1,21 @@
-import { Component, effect, inject } from '@angular/core';
+import { Component, effect, inject, OnInit } from '@angular/core';
 import { IUser, StateService } from './user/state.service';
 import { Router } from '@angular/router';
-import {initDials, initTooltips} from "flowbite";
+import { initDials, initTooltips } from 'flowbite';
 
 @Component({
   selector: 'app-root',
   template: `
-    <div class="flex flex-col h-screen justify-between">
-      <router-outlet></router-outlet>
+    <div class="flex flex-col h-screen md:justify-between">
+      <div class="self-start w-full">
+        <router-outlet></router-outlet>
+      </div>
       <app-footer />
     </div>
-
   `,
-  styles: [
-    `
-
-    `,
-  ],
+  styles: [],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   private stateService = inject(StateService);
   private router = inject(Router);
 
@@ -31,7 +28,6 @@ export class AppComponent {
     });
   }
   ngOnInit(): void {
-
     initTooltips();
     initDials();
   }
@@ -39,16 +35,6 @@ export class AppComponent {
   get signed() {
     const user = this.stateService.user();
     return user._id && user.email && user.token;
-  }
-
-  signout() {
-    this.stateService.user.set({
-      fullname: '',
-      email: '',
-      _id: '',
-      token: '',
-    });
-    this.router.navigate(['', 'signin']);
   }
 
   private loadStateFromLocalStorage(): void {

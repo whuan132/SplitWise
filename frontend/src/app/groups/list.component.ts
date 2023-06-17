@@ -33,7 +33,7 @@ import { StateService } from '../user/state.service';
 
     <app-header />
     <ng-template #list>
-      <div class="mt-20 max-w-4xl mx-auto w-full">
+      <div class="mt-20 mx-auto w-full items-start md:max-w-2xl">
         <h2
           class="mb-4 text-2xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-4xl dark:text-white"
         >
@@ -41,72 +41,64 @@ import { StateService } from '../user/state.service';
         </h2>
 
         <div class="space-y-2">
-          <div *ngFor="let g of groups">
-            <div
-              class="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-2xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 md:justify-between p-2"
-            >
-              <a (click)="gotoDetail(g)" class="flex">
-                <!--                      <img class="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-l-lg"-->
-                <!--                           src="../../assets/images/logo.png" alt="">-->
-                <div class="flex flex-col justify-between p-4 leading-normal">
-                  <h5
-                    class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
-                  >
-                    {{ g.title }} - {{ g.members[0].fullname }}
-                  </h5>
-                  <div *ngIf="!isPending(g)">
-                    <p
-                      class="mb-3 font-normal text-gray-700 dark:text-gray-400"
-                    >
-                      Click to show details of the group.
-                    </p>
-                    <p
-                      class="mb-3 font-normal text-gray-700 dark:text-gray-400"
-                    >
-                      Members: {{ g.members.length }} - Transitions:
-                      {{ g.transactions.length }}
-                    </p>
-                  </div>
-                  <div *ngIf="isPending(g)">
-                    <p
-                      class="mb-3 font-normal text-gray-700 dark:text-gray-400"
-                    >
-                      You should to accept the invitation to be part of the
-                      group.
-                    </p>
-                  </div>
+          <div
+            *ngFor="let g of groups"
+            class="flex flex-col w-auto items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 md:justify-between p-2"
+          >
+            <a (click)="gotoDetail(g)" class="flex">
+              <!--                      <img class="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-l-lg"-->
+              <!--                           src="../../assets/images/logo.png" alt="">-->
+              <div class="flex flex-col justify-between p-4 leading-normal">
+                <h5
+                  class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
+                >
+                  {{ g.title }} - {{ g.members[0].fullname }}
+                </h5>
+                <div *ngIf="!isPending(g)">
+                  <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                    Click to show details of the group.
+                  </p>
+                  <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                    Members: {{ g.members.length }} - Transitions:
+                    {{ g.transactions.length }}
+                  </p>
                 </div>
-              </a>
-
-              <div
-                class="inline-flex flex-col rounded-md shadow-sm mr-5"
-                *ngIf="isPending(g)"
-              >
-                <button
-                  (click)="acceptGroup(g)"
-                  class="px-4 py-2 text-sm font-medium text-green-700 bg-white border border-gray-200 rounded-t-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white"
-                >
-                  Accept
-                </button>
-                <button
-                  (click)="rejectGroup(g._id)"
-                  class="px-4 py-2 text-sm font-medium text-red-500 bg-white border border-gray-200 rounded-b-lg hover:bg-gray-100 hover:text-red-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-red-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white"
-                >
-                  Reject
-                </button>
+                <div *ngIf="isPending(g)">
+                  <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                    You should to accept the invitation to be part of the group.
+                  </p>
+                </div>
               </div>
+            </a>
 
-              <div
-                class="inline-flex rounded-md shadow-sm mr-5"
-                *ngIf="!isPending(g)"
+            <div
+              class="inline-flex flex-col rounded-md shadow-sm mr-5"
+              *ngIf="isPending(g)"
+            >
+              <button
+                (click)="acceptGroup(g)"
+                class="px-4 py-2 text-sm font-medium text-green-700 bg-white border border-gray-200 rounded-t-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white"
               >
-                <button
-                  (click)="deleteGroup(g._id)"
-                  class="px-4 py-2 text-sm font-medium text-red-500 bg-white border border-gray-200 rounded-l-lg rounded-r-lg hover:bg-gray-100 hover:text-red-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-red-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white"
-                >
-                  Remove
-                </button>
-              </div>
+                Accept
+              </button>
+              <button
+                (click)="rejectGroup(g._id)"
+                class="px-4 py-2 text-sm font-medium text-red-500 bg-white border border-gray-200 rounded-b-lg hover:bg-gray-100 hover:text-red-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-red-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white"
+              >
+                Reject
+              </button>
+            </div>
+
+            <div
+              class="inline-flex rounded-md shadow-sm mr-5"
+              *ngIf="!isPending(g)"
+            >
+              <button
+                (click)="deleteGroup(g._id)"
+                class="px-4 py-2 text-sm font-medium text-red-500 bg-white border border-gray-200 rounded-l-lg rounded-r-lg hover:bg-gray-100 hover:text-red-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-red-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white"
+              >
+                Remove
+              </button>
             </div>
           </div>
 

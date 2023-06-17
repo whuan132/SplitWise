@@ -41,6 +41,7 @@ export const GroupHelper = {
             r.payback += t.amount;
           } else {
             r.spend += t.amount;
+            r.owes -= (t.amount * (length - 1)) / length;
           }
         } else {
           // member others
@@ -55,7 +56,7 @@ export const GroupHelper = {
     members.forEach((m) => {
       let r = result.members[m.user_id as string];
       if (r.owes > 0) {
-        r.owes = r.owes - r.spend - r.payback;
+        r.owes = r.owes - r.payback;
         if (Math.abs(r.owes) < epsilon) {
           r.owes = 0;
         }
@@ -66,7 +67,7 @@ export const GroupHelper = {
         .filter((t) => t.paid_by.user_id !== m.user_id)
         .forEach((t) => {
           let amount = t.amount;
-          let delta = amount / length;
+          let delta = amount / (length - 1);
           while (amount > epsilon) {
             for (let e in result.members) {
               if (e === t.paid_by.user_id) continue;
@@ -77,13 +78,13 @@ export const GroupHelper = {
                 amount -= d;
               }
             }
-            delta = amount / length;
+            delta = amount / (length - 1);
             delta = Math.max(0.01, delta);
 
             let remain = 0;
             for (let e in result.members) {
               const r2 = result.members[e];
-              if (e !== t.paid_by.user_id) {
+              if (e !== t.paid_by.user_id && r2.owes <= epsilon) {
                 remain += r2.owes;
               }
             }

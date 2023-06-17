@@ -59,7 +59,7 @@ import { StateService } from '../user/state.service';
         </div>
       </div>
       <hr class="my-4" />
-      <ol class="relative border-l border-gray-200 dark:border-gray-700">
+      <ol class="m-2 relative border-l border-gray-200 dark:border-gray-700">
         <li
           class="mb-10 ml-6"
           *ngFor="let transaction of transactions_filter || transactions"

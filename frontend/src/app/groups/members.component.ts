@@ -17,14 +17,21 @@ import { IGroupResult } from '../utils/GroupHelper';
 @Component({
   selector: 'app-members',
   template: `
-    <div class="max-w-2xl mx-auto space-y-2">
+    <div class="m-2 max-w-2xl mx-auto space-y-2">
       <div *ngFor="let user of group.members">
         <h2 id="{{ 'accordion-heading-' + user.user_id }}">
           <button
             (click)="showMemberDetail('accordion-heading-' + user.user_id)"
             (dblclick)="closeMemberDetail('accordion-heading-' + user.user_id)"
+            [ngClass]="
+              !user.pending &&
+              members &&
+              members.getItem('accordion-heading-' + user.user_id)?.active
+                ? 'rounded-t-xl'
+                : 'rounded-xl'
+            "
             type="button"
-            class="flex items-center justify-between w-full p-5 font-medium text-left text-gray-500 border  border-gray-200 rounded-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+            class="flex items-center justify-between w-full p-5 font-medium text-left text-gray-500 border border-gray-200 hover:bg-gray-100"
             aria-expanded="true"
             aria-controls="'accordion-example-body"
           >
@@ -51,7 +58,7 @@ import { IGroupResult } from '../utils/GroupHelper';
         >
           <div
             *ngIf="result.members[user.user_id || '']"
-            class="p-5 border rounded-lg border-gray-200 dark:border-gray-700 dark:bg-gray-900"
+            class="p-5 border-l border-r border-b rounded-b-lg border-gray-200 dark:border-gray-700 dark:bg-gray-900"
           >
             <div class="flex justify-around mb-2.5">
               <div class="flex flex-col justify-center items-center ">

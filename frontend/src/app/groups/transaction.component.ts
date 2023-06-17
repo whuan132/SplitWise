@@ -93,7 +93,7 @@ import { StateService } from '../user/state.service';
           </h3>
           <time
             class="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500"
-            >Paid by {{ transaction.paid_by.fullname }} on
+            >Paid by<span class="hover:text-blue-600 cursor-pointer" (click)="filterByUser(transaction.paid_by.user_id)"> {{ transaction.paid_by.fullname }}</span> on
             {{ transaction.date | date }}</time
           >
           <p
@@ -148,6 +148,7 @@ import { StateService } from '../user/state.service';
 })
 export class TransactionComponent implements OnInit {
   @Input({ required: true }) groupId!: string;
+  @Input({ required: true }) filterUser!: string;
   @Input({ required: true, alias: 'transactions' })
   transactions!: ITransaction[];
   @Output('remove')
@@ -165,6 +166,11 @@ export class TransactionComponent implements OnInit {
       this.categories.add(trans.category);
     });
     console.log(this.categories);
+    if (this.filterUser){
+      this.transactions_filter=this.transactions.filter(trans=>
+         trans.paid_by.user_id===this.filterUser
+      )
+    }
   }
   filter(category: string) {
     this.category_filter = category;
@@ -218,5 +224,13 @@ export class TransactionComponent implements OnInit {
         console.log(err);
       }
     );
+  }
+  filterByUser(id: string){
+    this.filterUser=id;
+    if (this.filterUser){
+      this.transactions_filter=this.transactions.filter(trans=>
+        trans.paid_by.user_id===this.filterUser
+      )
+    }
   }
 }

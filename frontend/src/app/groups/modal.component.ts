@@ -5,7 +5,8 @@ import { Modal, ModalOptions } from 'flowbite';
 @Component({
   selector: 'app-modal',
   template: `
-    <div class="fixed right-2 bottom-2">
+    <div class="relative">
+    <div class="absolute -right-5 -bottom-20 mb-2.5">
       <!-- Modal toggle -->
       <button
         *ngIf="button"
@@ -97,6 +98,7 @@ import { Modal, ModalOptions } from 'flowbite';
           </div>
         </div>
       </div>
+    </div>
     </div>
   `,
   styles: [],

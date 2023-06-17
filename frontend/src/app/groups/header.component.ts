@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { StateService } from '../user/state.service';
 import { Router } from '@angular/router';
+import {Modal, ModalOptions} from "flowbite";
 
 @Component({
   selector: 'app-header',
@@ -26,11 +27,20 @@ import { Router } from '@angular/router';
           <div class="flex md:order-2">
             <button
               type="button"
-              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              data-modal-target="popup-modal"
+              class="text-white bg-blue-700  hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               (click)="signout()"
             >
               SignOut
             </button>
+
+
+
+
+
+
+
+
           </div>
           <div
             class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
@@ -41,25 +51,15 @@ import { Router } from '@angular/router';
             >
               <li>
                 <a
+                  [routerLink]="['', 'groups']"
                   class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                   >Home</a
                 >
               </li>
+
               <li>
                 <a
-                  [routerLink]="['', 'groups']"
-                  class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
-                  >Groups</a
-                >
-              </li>
-              <li>
-                <a
-                  class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-                  >Contact</a
-                >
-              </li>
-              <li>
-                <a
+                  [routerLink]="['','about']"
                   class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                   >About</a
                 >
@@ -73,6 +73,8 @@ import { Router } from '@angular/router';
   styles: [],
 })
 export class HeaderComponent {
+  private modal!: Modal;
+
   stateService = inject(StateService);
   router = inject(Router);
   constructor() {}
@@ -85,4 +87,42 @@ export class HeaderComponent {
     });
     this.router.navigate(['', 'signin']);
   }
+  showModal(): void {
+    const $modalElement = document.querySelector(
+      '#popup-modal'
+    ) as HTMLElement;
+
+    const modalOptions = {
+      placement: 'center',
+      backdrop: 'dynamic',
+      backdropClasses:
+        'bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40',
+      onHide: () => {
+        console.log('modal is hidden');
+      },
+      onShow: () => {
+        console.log('modal is shown');
+      },
+      onToggle: () => {
+        console.log('modal has been toggled');
+      },
+    };
+
+    this.modal = new Modal($modalElement, modalOptions as ModalOptions);
+    this.modal._init();
+    this.modal.show();
+
+    // const icon = document.getElementById('close-icon');
+    // if (icon)
+    //   icon.addEventListener('click', () => {
+    //     this.modal.hide();
+    //   });
+  }
+
+  hideModal() {
+    if (this.modal) {
+      this.modal.hide();
+    }
+  }
+
 }

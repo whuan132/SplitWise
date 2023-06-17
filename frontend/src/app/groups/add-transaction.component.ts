@@ -8,7 +8,8 @@ import { formatDate } from '@angular/common';
 @Component({
   selector: 'app-add-transaction',
   template: `
-    <div class="fixed right-2 bottom-2">
+    <div class="relative">
+    <div class="absolute  -right-5 -bottom-5 mb-2.5">
       <button
         (click)="showModal()"
         type="button"
@@ -171,6 +172,7 @@ import { formatDate } from '@angular/common';
           </div>
         </div>
       </div>
+    </div>
     </div>
   `,
   styles: [``],

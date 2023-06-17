@@ -13,6 +13,7 @@ import { HeaderComponent } from './header.component';
 import { ModalComponent } from './modal.component';
 import { TransactionComponent } from './transaction.component';
 import { MembersComponent } from './members.component';
+import {AUTO_STYLE} from "@angular/animations";
 
 const routes: Routes = [
   {
@@ -41,6 +42,7 @@ const routes: Routes = [
     component: InviteMemberComponent,
     canActivate: [authGuard],
   },
+
 ];
 
 @NgModule({
@@ -55,6 +57,7 @@ const routes: Routes = [
     ModalComponent,
     TransactionComponent,
     MembersComponent,
+
   ],
   imports: [CommonModule, ReactiveFormsModule, RouterModule.forChild(routes)],
   exports: [RouterModule],

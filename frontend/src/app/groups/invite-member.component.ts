@@ -6,7 +6,8 @@ import { Modal, ModalOptions } from 'flowbite';
 @Component({
   selector: 'app-invite-member',
   template: `
-    <div class="fixed right-2 bottom-2">
+    <div class="relative">
+    <div class="absolute -right-5 -bottom-15">
       <!-- Modal toggle -->
       <button
         (click)="showModal()"
@@ -108,6 +109,7 @@ import { Modal, ModalOptions } from 'flowbite';
           </div>
         </div>
       </div>
+    </div>
     </div>
   `,
   styles: [``],

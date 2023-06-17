@@ -251,6 +251,9 @@ export const delete_member = async (req, res, next) => {
           members: {
             email: req.params.email,
           },
+          transactions: {
+            "paid_by.user_id": token._id,
+          },
         },
       }
     );

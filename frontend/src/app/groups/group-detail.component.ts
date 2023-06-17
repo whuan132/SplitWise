@@ -101,10 +101,8 @@ import { GroupHelper, IGroupResult } from '../utils/GroupHelper';
           (remove)="deleteTransaction($event)"
           [filterUser]="filter"
           *ngIf="showTrasactions"
-
         />
         <app-members
-
           [group]="group"
           [groupResult]="groupResult"
           *ngIf="showMembers"
@@ -136,7 +134,7 @@ export class GroupDetailComponent implements OnInit {
   group!: IGroup;
   groupId!: string;
   groupResult!: IGroupResult;
-  filter= '';
+  filter = '';
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private groupsService = inject(GroupsService);
@@ -178,6 +176,11 @@ export class GroupDetailComponent implements OnInit {
   deleteMember(email: string) {
     this.groupsService.deleteMember(this.groupId, email).subscribe(
       (res) => {
+        if (email === this.stateService.user().email) {
+          // remove myself, navigate to groups
+          this.router.navigate(['/groups']);
+          return;
+        }
         this.group.members = this.group.members.filter(
           (t) => t.email !== email
         );
@@ -212,10 +215,9 @@ export class GroupDetailComponent implements OnInit {
     this.group.transactions.unshift(transaction);
     this.groupResult = GroupHelper.compute(this.group);
   }
-  showMembersTransaction(id :string){
-    this.showMembers=false
-    this.showTrasactions= true;
-    this.filter=id;
-
+  showMembersTransaction(id: string) {
+    this.showMembers = false;
+    this.showTrasactions = true;
+    this.filter = id;
   }
 }

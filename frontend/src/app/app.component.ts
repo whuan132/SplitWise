@@ -2,12 +2,14 @@ import { Component, effect, inject, OnInit } from '@angular/core';
 import { IUser, StateService } from './user/state.service';
 import { Router } from '@angular/router';
 import { initDials, initTooltips } from 'flowbite';
+import {ToastService} from "./toast.service";
 
 @Component({
   selector: 'app-root',
   template: `
     <app-header *ngIf="signed" />
     <div class="flex flex-col h-screen md:justify-between">
+        <app-toast *ngIf="toastService.toast().show" [message]="toastService.toast().message" />
       <div class="self-start w-full">
         <router-outlet></router-outlet>
       </div>
@@ -17,6 +19,7 @@ import { initDials, initTooltips } from 'flowbite';
   styles: [],
 })
 export class AppComponent implements OnInit {
+  toastService= inject(ToastService)
   private stateService = inject(StateService);
   private router = inject(Router);
 

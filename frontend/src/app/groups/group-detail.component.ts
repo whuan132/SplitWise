@@ -4,6 +4,7 @@ import { GroupsService, IGroup, IMember, ITransaction } from './groups.service';
 import { StateService } from '../user/state.service';
 import { initDials, initTooltips } from 'flowbite';
 import { GroupHelper, IGroupResult } from '../utils/GroupHelper';
+import {ToastService} from "../toast.service";
 
 @Component({
   selector: 'app-group-detail',
@@ -138,10 +139,12 @@ export class GroupDetailComponent implements OnInit {
   showTrasactions = true;
   showMembers = false;
 
+
   group!: IGroup;
   groupId!: string;
   groupResult!: IGroupResult;
   filter = '';
+  toastService= inject(ToastService)
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private groupsService = inject(GroupsService);
@@ -177,6 +180,7 @@ export class GroupDetailComponent implements OnInit {
       email: email,
       pending: true,
     });
+    this.toastService.showNotification(`member: ${email} invited`);
     this.groupResult = GroupHelper.compute(this.group);
   }
 
@@ -192,6 +196,7 @@ export class GroupDetailComponent implements OnInit {
           (t) => t.email !== email
         );
         this.groupResult = GroupHelper.compute(this.group);
+        this.toastService.showNotification(`member ${email} removed`)
       },
       (error) => {
         console.log(error);
@@ -206,6 +211,7 @@ export class GroupDetailComponent implements OnInit {
           (t) => t._id !== trans_id
         );
         this.groupResult = GroupHelper.compute(this.group);
+        this.toastService.showNotification(`transaction id:${trans_id} deleted`)
       },
       (error) => {
         console.log(error);

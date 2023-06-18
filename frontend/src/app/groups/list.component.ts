@@ -31,7 +31,6 @@ import { StateService } from '../user/state.service';
       </div>
     </div>
 
-    <app-header />
     <ng-template #list>
       <div class="mt-20 mx-auto w-full items-start md:max-w-2xl">
         <h2

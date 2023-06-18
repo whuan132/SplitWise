@@ -6,11 +6,12 @@ import { initDials, initTooltips } from 'flowbite';
 @Component({
   selector: 'app-root',
   template: `
+    <app-header *ngIf="signed" />
     <div class="flex flex-col h-screen md:justify-between">
       <div class="self-start w-full">
         <router-outlet></router-outlet>
       </div>
-      <app-footer />
+      <app-footer *ngIf="signed" />
     </div>
   `,
   styles: [],

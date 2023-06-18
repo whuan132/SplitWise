@@ -14,8 +14,9 @@ import {
   HttpClientModule,
   HTTP_INTERCEPTORS,
 } from '@angular/common/http';
-import {NgIf} from "@angular/common";
+import { NgIf } from '@angular/common';
 import { FooterComponent } from './footer.component';
+import { HeaderComponent } from './header.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,7 @@ import { FooterComponent } from './footer.component';
     HomeComponent,
     AboutComponent,
     FooterComponent,
-
+    HeaderComponent,
   ],
   imports: [
     BrowserModule,

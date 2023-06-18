@@ -33,7 +33,6 @@ import { GroupHelper, IGroupResult } from '../utils/GroupHelper';
       </div>
     </div>
 
-    <app-header />
     <ng-template #details>
       <div class="mt-20 mx-auto w-full items-start md:max-w-2xl">
         <h2

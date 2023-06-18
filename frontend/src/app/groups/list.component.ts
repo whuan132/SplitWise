@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { GroupsService, IGroup } from './groups.service';
 import { Router } from '@angular/router';
 import { StateService } from '../user/state.service';
+import {ToastService} from "../toast.service";
 
 @Component({
   selector: 'app-list',
@@ -58,7 +59,7 @@ import { StateService } from '../user/state.service';
                     Click to show details of the group.
                   </p>
                   <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                    Members: {{ g.members.length }} - Transitions:
+                    Members: {{ g.members.length }} - Transactions:
                     {{ g.transactions.length }}
                   </p>
                 </div>
@@ -108,11 +109,13 @@ import { StateService } from '../user/state.service';
               [fields]="['title']"
               button="Create new Group"
               (add)="addGroup($event)"
+              class="mb-5"
             />
           </div>
         </div>
       </div>
     </ng-template>
+
   `,
   styles: [],
 })
@@ -122,8 +125,12 @@ export class ListComponent implements OnInit {
   private stateService = inject(StateService);
   private groupService = inject(GroupsService);
   private router = inject(Router);
+  toast= inject(ToastService)
+
+
 
   ngOnInit() {
+
     this.groupService.getGroups().subscribe(
       (res) => {
         if (res && res.success) {
@@ -152,6 +159,8 @@ export class ListComponent implements OnInit {
             m.user_id = user._id;
             m.fullname = user.fullname;
             m.pending = false;
+
+            this.toast.showNotification(`joined spend group: ${group.title}`)
             return true;
           }
           return false;
@@ -169,6 +178,7 @@ export class ListComponent implements OnInit {
       (res) => {
         if (res && res.success) {
           this.groups = this.groups.filter((g) => g._id !== group_id);
+          this.toast.showNotification(`rejected spend group: ${this.groups.find(x=>x._id===group_id)?.title}`)
         }
       },
       (error) => {
@@ -181,6 +191,7 @@ export class ListComponent implements OnInit {
     this.groupService.deleteGroup(group_id).subscribe(
       (res) => {
         if (res && res.success) {
+          this.toast.showNotification(`deleted spend group: ${this.groups.find(x=>x._id===group_id)?.title}`)
           this.groups = this.groups.filter((g) => g._id !== group_id);
         }
       },
@@ -196,6 +207,8 @@ export class ListComponent implements OnInit {
       console.log(res);
       this.groups.unshift(res.data);
     });
+
+    this.toast.showNotification(`created new spend group: ${title}`)
   }
   gotoDetail(group: IGroup) {
     if (this.isPending(group)) {
@@ -203,4 +216,13 @@ export class ListComponent implements OnInit {
     }
     this.router.navigate(['', 'groups', 'detail', group._id]);
   }
+  notify(){
+    let length = this.groups.filter(x=>this.isPending(x)).length;
+
+    if(length>0){
+      setTimeout(()=> {
+        this.toast.showNotification(`you have ${length} unchecked group invitations`)
+      },0)
+  }
+}
 }

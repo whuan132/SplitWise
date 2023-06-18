@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IUser, StateService } from './state.service';
 import { Router } from '@angular/router';
 import { UserService } from './user.service';
+import {ToastService} from "../toast.service";
 
 @Component({
   selector: 'app-signin',
@@ -70,11 +71,11 @@ import { UserService } from './user.service';
   styles: [``],
 })
 export class SigninComponent {
+  toast= inject(ToastService)
   signinForm = inject(FormBuilder).group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required],
   });
-
   private userService = inject(UserService);
   private stateService = inject(StateService);
   private router = inject(Router);
@@ -102,6 +103,7 @@ export class SigninComponent {
               const user = jwtDecode(token) as IUser;
               console.log(user);
               this.stateService.user.set({ ...user, token });
+              this.toast.showNotification(`welcome,${user.fullname}`)
               this.router.navigate(['', 'groups']);
             } catch (error) {
               console.error('Error decoding JWT:', error);

@@ -4,11 +4,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GroupsService, ITransaction } from './groups.service';
 import { Modal, ModalOptions } from 'flowbite';
 import { formatDate } from '@angular/common';
+import {ToastService} from "../toast.service";
 
 @Component({
   selector: 'app-add-transaction',
   template: `
-    <div class="relative">
+    <div class="relative mt-10">
     <div class="absolute  -right-5 -bottom-5 mb-2.5">
       <button
         (click)="showModal()"
@@ -180,6 +181,7 @@ import { formatDate } from '@angular/common';
 export class AddTransactionComponent {
   groupId!: string;
   receipt!: File;
+  toastService= inject(ToastService)
   @Output('transaction') transaction = new EventEmitter<ITransaction>();
   @Input({ required: true, alias: 'amount_owed' }) amount_owed!: number;
   @Input({ required: true, alias: 'groupName' }) group_name!: string;
@@ -229,6 +231,7 @@ export class AddTransactionComponent {
         console.log(res);
         this.transaction.emit(res.data as ITransaction);
         this.hideModal();
+        this.toastService.showNotification(`transaction added successfully`)
       },
       (error) => {
         console.log(error);

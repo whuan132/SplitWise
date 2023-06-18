@@ -1,7 +1,8 @@
 import { Component, inject, Input, SimpleChanges } from '@angular/core';
 import { StateService } from './user/state.service';
 import { Router } from '@angular/router';
-import { Modal, ModalOptions } from 'flowbite';
+import {Modal, ModalOptions} from "flowbite";
+import {ToastService} from "./toast.service";
 
 @Component({
   selector: 'app-header',
@@ -72,6 +73,8 @@ import { Modal, ModalOptions } from 'flowbite';
 })
 export class HeaderComponent {
   currentPage: string = 'Home';
+  private modal!: Modal;
+  toast= inject(ToastService)
 
   private stateService = inject(StateService);
   private router = inject(Router);
@@ -99,5 +102,6 @@ export class HeaderComponent {
       token: '',
     });
     this.router.navigate(['', 'signin']);
+    this.toast.showNotification('Goodbye,👋')
   }
 }

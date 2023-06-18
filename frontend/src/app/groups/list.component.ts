@@ -195,6 +195,7 @@ export class ListComponent implements OnInit {
           this.groups = this.groups.filter((g) => g._id !== group_id);
           this.toast.showNotification(`deleted spend group: ${this.groups.find(x=>x._id===group_id)?.title}`)
           this.groups = this.groups.filter((g) => g._id !== group_id);
+          this.toast.showNotification(`deleted spend group: ${this.groups.find(x=>x._id===group_id)?.title}`)
         }
       },
       (error) => {

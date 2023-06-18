@@ -102,6 +102,7 @@ export class SigninComponent {
               const token = res.data as string;
               const user = jwtDecode(token) as IUser;
               console.log(user);
+              this.toastr.success("signed in successfully")
               this.stateService.user.set({ ...user, token });
               this.toast.showNotification(`welcome,${user.fullname}`)
               this.router.navigate(['', 'groups']);

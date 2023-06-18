@@ -61,7 +61,7 @@ import {ToastService} from "../toast.service";
                     Click to show details of the group.
                   </p>
                   <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                    Members: {{ g.members.length }} - Transitions:
+                    Members: {{ g.members.length }} - Transactions:
                     {{ g.transactions.length }}
                   </p>
                 </div>
@@ -193,8 +193,8 @@ export class ListComponent implements OnInit {
     this.groupService.deleteGroup(group_id).subscribe(
       (res) => {
         if (res && res.success) {
-          this.groups = this.groups.filter((g) => g._id !== group_id);
           this.toast.showNotification(`deleted spend group: ${this.groups.find(x=>x._id===group_id)?.title}`)
+          this.groups = this.groups.filter((g) => g._id !== group_id);
         }
       },
       (error) => {
@@ -210,7 +210,7 @@ export class ListComponent implements OnInit {
       this.groups.unshift(res.data);
     });
 
-    this.toast.showNotification("created new spend group: title")
+    this.toast.showNotification(`created new spend group: ${title}`)
   }
   gotoDetail(group: IGroup) {
     if (this.isPending(group)) {

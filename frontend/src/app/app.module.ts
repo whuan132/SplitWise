@@ -19,6 +19,7 @@ import { FooterComponent } from './footer.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+
 import {ToastComponent} from "./toast.component";
 @NgModule({
   declarations: [

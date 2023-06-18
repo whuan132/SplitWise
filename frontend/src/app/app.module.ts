@@ -16,7 +16,9 @@ import {
 } from '@angular/common/http';
 import {NgIf} from "@angular/common";
 import { FooterComponent } from './footer.component';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import {ToastComponent} from "./toast.component";
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,6 +27,7 @@ import { FooterComponent } from './footer.component';
     HomeComponent,
     AboutComponent,
     FooterComponent,
+    ToastComponent
 
   ],
   imports: [
@@ -35,6 +38,8 @@ import { FooterComponent } from './footer.component';
     ReactiveFormsModule,
     NgIf,
     ReactiveFormsModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot()
   ],
   providers: [
     provideHttpClient(),

@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { StateService } from '../user/state.service';
 import { Router } from '@angular/router';
 import {Modal, ModalOptions} from "flowbite";
+import {ToastService} from "../toast.service";
 
 @Component({
   selector: 'app-header',
@@ -74,6 +75,7 @@ import {Modal, ModalOptions} from "flowbite";
 })
 export class HeaderComponent {
   private modal!: Modal;
+  toast= inject(ToastService)
 
   stateService = inject(StateService);
   router = inject(Router);
@@ -86,6 +88,7 @@ export class HeaderComponent {
       token: '',
     });
     this.router.navigate(['', 'signin']);
+    this.toast.showNotification('Goodbye,👋')
   }
   showModal(): void {
     const $modalElement = document.querySelector(

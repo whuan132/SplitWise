@@ -17,7 +17,7 @@ import {
 import {NgIf} from "@angular/common";
 import { FooterComponent } from './footer.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ToastrModule } from 'ngx-toastr';
+
 import {ToastComponent} from "./toast.component";
 @NgModule({
   declarations: [
@@ -39,7 +39,7 @@ import {ToastComponent} from "./toast.component";
     NgIf,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    ToastrModule.forRoot()
+
   ],
   providers: [
     provideHttpClient(),

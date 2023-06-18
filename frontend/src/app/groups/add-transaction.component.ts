@@ -9,7 +9,7 @@ import {ToastService} from "../toast.service";
 @Component({
   selector: 'app-add-transaction',
   template: `
-    <div class="relative">
+    <div class="relative mt-10">
     <div class="absolute  -right-5 -bottom-5 mb-2.5">
       <button
         (click)="showModal()"

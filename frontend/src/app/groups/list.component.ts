@@ -2,7 +2,6 @@ import { Component, inject, OnInit } from '@angular/core';
 import { GroupsService, IGroup } from './groups.service';
 import { Router } from '@angular/router';
 import { StateService } from '../user/state.service';
-import {ToastrService} from "ngx-toastr";
 import {ToastService} from "../toast.service";
 
 @Component({

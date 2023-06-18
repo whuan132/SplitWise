@@ -19,6 +19,7 @@ import { FooterComponent } from './footer.component';
 import { HeaderComponent } from './header.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import {ToastComponent} from "./toast.component";
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import {ToastComponent} from "./toast.component";
     NgIf,
     ReactiveFormsModule,
     BrowserAnimationsModule,
+
   ],
   providers: [
     provideHttpClient(),

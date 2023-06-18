@@ -191,13 +191,6 @@ export class ListComponent implements OnInit {
     this.groupService.deleteGroup(group_id).subscribe(
       (res) => {
         if (res && res.success) {
-<<<<<<< HEAD
-          this.toast.showNotification(`deleted spend group: ${this.groups.find(x=>x._id===group_id)?.title}`)
-          this.groups = this.groups.filter((g) => g._id !== group_id);
-          this.toast.showNotification(`deleted spend group: ${this.groups.find(x=>x._id===group_id)?.title}`)
-          this.groups = this.groups.filter((g) => g._id !== group_id);
-=======
->>>>>>> 67f2f4f (notifications)
           this.toast.showNotification(`deleted spend group: ${this.groups.find(x=>x._id===group_id)?.title}`)
           this.groups = this.groups.filter((g) => g._id !== group_id);
         }

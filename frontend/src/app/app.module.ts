@@ -16,13 +16,10 @@ import {
 } from '@angular/common/http';
 import { NgIf } from '@angular/common';
 import { FooterComponent } from './footer.component';
-<<<<<<< HEAD
 
-=======
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import {ToastComponent} from "./toast.component";
->>>>>>> 586e489 (notifications)
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,11 +38,8 @@ import {ToastComponent} from "./toast.component";
     ReactiveFormsModule,
     NgIf,
     ReactiveFormsModule,
-<<<<<<< HEAD
-=======
     BrowserAnimationsModule,
 
->>>>>>> 586e489 (notifications)
   ],
   providers: [
     provideHttpClient(),

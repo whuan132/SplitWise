@@ -59,11 +59,17 @@ import { StateService } from '../user/state.service';
         </div>
       </div>
       <hr class="my-4" />
+      <div *ngIf="!transactions.length" class="my-36 text-xl text-gray-600 flex justify-center">
+        <p>NO TRASNSACTIONS HAS BEEN MADE IN THIS GROUP.</p>
+
+      </div>
       <ol class="m-2 relative border-l border-gray-200 dark:border-gray-700">
+
         <li
           class="mb-10 ml-6"
           *ngFor="let transaction of transactions_filter || transactions"
         >
+
           <span
             class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -left-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900"
           >

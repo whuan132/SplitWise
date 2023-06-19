@@ -39,6 +39,11 @@ import {ToastService} from "../toast.service";
         >
           My Spending Groups
         </h2>
+        <div *ngIf="!groups.length" class="my-36 text-xl text-gray-600 flex justify-center">
+          <p>YOU ARE NOT A MEMBER IN ANY SPENDING GROUP</p>
+          <P>create One using the button below</P>
+
+        </div>
 
         <div class="space-y-2">
           <div
